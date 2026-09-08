@@ -78,13 +78,82 @@ var (
 	shareLimiter = newRateLimiter(10, 5*time.Minute)
 )
 
-// clientIP returns the originating IP address of the request.
-// It honours the X-Real-IP and X-Forwarded-For headers that a trusted reverse
-// proxy may set, falling back to RemoteAddr when neither is present or valid.
+// privateCIDRs lists all RFC-1918, RFC-4193 and loopback ranges.
+// Connections arriving from these addresses are considered to originate
+// from a trusted local reverse proxy (Caddy, Nginx, Pangolin, …), so
+// proxy-injected headers (X-Real-IP, X-Forwarded-For, CF-Connecting-IP)
+// are honoured.  Connections from public IPs are never allowed to supply
+// their own "real IP" header — that would let an attacker bypass rate limits.
+var privateCIDRs = func() []*net.IPNet {
+	blocks := []string{
+		"127.0.0.0/8",    // IPv4 loopback
+		"::1/128",        // IPv6 loopback
+		"10.0.0.0/8",     // RFC-1918
+		"172.16.0.0/12",  // RFC-1918
+		"192.168.0.0/16", // RFC-1918
+		"fc00::/7",       // RFC-4193 unique local
+	}
+	nets := make([]*net.IPNet, 0, len(blocks))
+	for _, b := range blocks {
+		_, ipnet, _ := net.ParseCIDR(b)
+		nets = append(nets, ipnet)
+	}
+	return nets
+}()
+
+// isTrustedProxy returns true when the direct TCP peer is a local or
+// private-network address — meaning a reverse proxy that we trust to
+// have set accurate forwarding headers.
+func isTrustedProxy(remoteAddr string) bool {
+	host, _, err := net.SplitHostPort(remoteAddr)
+	if err != nil {
+		host = remoteAddr
+	}
+	ip := net.ParseIP(host)
+	if ip == nil {
+		return false
+	}
+	for _, cidr := range privateCIDRs {
+		if cidr.Contains(ip) {
+			return true
+		}
+	}
+	return false
+}
+
+// clientIP returns the real originating IP address of the request.
+//
+// Security model:
+//   - If the TCP connection comes directly from a public IP, that IP is used
+//     unconditionally.  Proxy headers are ignored because a public client can
+//     forge them trivially to bypass rate limiting.
+//   - If the TCP connection comes from a private/loopback address (a local
+//     reverse proxy such as Caddy, Nginx, Pangolin, or a Cloudflare tunnel),
+//     the real client IP is read from proxy headers in this priority order:
+//     1. CF-Connecting-IP  (Cloudflare)
+//     2. X-Real-IP         (Nginx, Caddy)
+//     3. X-Forwarded-For   (standard, leftmost IP)
+//     4. RemoteAddr        (fallback)
 func clientIP(r *http.Request) string {
-	if ip := r.Header.Get("X-Real-IP"); ip != "" {
-		if net.ParseIP(strings.TrimSpace(ip)) != nil {
-			return strings.TrimSpace(ip)
+	remoteHost, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		remoteHost = r.RemoteAddr
+	}
+
+	if !isTrustedProxy(r.RemoteAddr) {
+		// Public connection — use the TCP peer address directly.
+		return remoteHost
+	}
+
+	// Connection from a local proxy — trust its forwarding headers.
+	if ip := strings.TrimSpace(r.Header.Get("CF-Connecting-IP")); ip != "" {
+		if net.ParseIP(ip) != nil {
+			return ip
+		}
+	}
+	if ip := strings.TrimSpace(r.Header.Get("X-Real-IP")); ip != "" {
+		if net.ParseIP(ip) != nil {
+			return ip
 		}
 	}
 	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
@@ -93,9 +162,5 @@ func clientIP(r *http.Request) string {
 			return ip
 		}
 	}
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return r.RemoteAddr
-	}
-	return host
+	return remoteHost
 }
