@@ -8,6 +8,7 @@ rice-box.go
 /dist
 /site
 .venv
+demo_data/
 
 .DS_Store
 node_modules
