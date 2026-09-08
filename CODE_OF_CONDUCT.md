@@ -34,9 +34,7 @@ File Browser Next operates with a flat, contributor-based model. There are no fi
 
 ## Reporting
 
-If you witness or experience behavior that violates this code of conduct, report it to the project maintainer at **contact@revlibertaire.com**. Reports are treated confidentially. You can also open a private issue on GitHub if you prefer.
-
-All reports will be reviewed and handled fairly. Retaliation against anyone who reports in good faith is itself a violation of this code of conduct.
+If you witness or experience behavior that violates this code of conduct, you can report it to **contact@revlibertaire.com** or open a private issue on GitHub. Reports are handled confidentially on a best-effort basis. The maintainers are volunteers and cannot guarantee a formal response or outcome.
 
 ## Consequences
 
