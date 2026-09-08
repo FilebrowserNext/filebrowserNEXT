@@ -1,115 +1,125 @@
-# Building File Browser
+# Contributing to File Browser Next
 
-This project is archived on 2026-09-01. Pull requests are not accepted and no further changes are merged. This document is kept as build documentation for anyone wishing to build the project from source.
+File Browser Next is an actively maintained project. Pull requests, bug reports, and feature proposals are welcome.
 
 ## Project Structure
 
-The backend side of the application is written in [Go](https://golang.org/), while the frontend (located on a subdirectory of the same name) is written in [Vue.js](https://vuejs.org/). Due to the tight coupling required by some features, basic knowledge of both Go and Vue.js is recommended.
+The backend is written in [Go](https://golang.org/) and the frontend (in the `frontend/` subdirectory) is written in [Vue.js](https://vuejs.org/). Some features are tightly coupled between the two layers, so a basic understanding of both is recommended.
 
-* Learn Go: [https://github.com/golang/go/wiki/Learn](https://github.com/golang/go/wiki/Learn)
-* Learn Vue.js: [https://vuejs.org/guide/introduction.html](https://vuejs.org/guide/introduction.html)
+- Learn Go: [https://github.com/golang/go/wiki/Learn](https://github.com/golang/go/wiki/Learn)
+- Learn Vue.js: [https://vuejs.org/guide/introduction.html](https://vuejs.org/guide/introduction.html)
 
-We encourage you to use git to manage your fork. To clone the main repository, just run:
+Clone the repository:
 
 ```bash
-git clone https://github.com/filebrowser/filebrowser
+git clone https://github.com/FilebrowserNext/filebrowserNEXT
 ```
-
-We use [Taskfile](https://taskfile.dev/) to manage the different processes (building, releasing, etc) automatically.
 
 ## Build
 
-You can fully build the project in order to produce a binary by running:
+Build the complete project (frontend + backend) in two steps:
 
 ```bash
-task build
+# 1. Build the frontend assets
+cd frontend
+pnpm install
+pnpm run build
+cd ..
+
+# 2. Compile the Go binary (embeds the built frontend)
+go build -o filebrowser .
 ```
 
 ## Development
 
-For development, there are a few things to have in mind.
-
 ### Frontend
 
-We use [Node.js](https://nodejs.org/en/) on the frontend to manage the build process. Prepare the frontend environment:
+Requirements: Node.js >= 24.0.0, pnpm >= 10.0.0.
 
 ```bash
-# From the root of the repo, go to frontend/
 cd frontend
 
-# Install the dependencies
+# Install dependencies
 pnpm install
+
+# Watch mode — serves the UI with hot reload
+pnpm run dev
 ```
 
-If you just want to develop the backend, you can create a static build of the frontend:
+When using `pnpm run dev`, access the interface through the Vite development server URL, not through the Go binary directly.
+
+To produce a static build of the frontend (required before building the Go binary):
 
 ```bash
 pnpm run build
 ```
 
-If you want to develop the frontend, start a development server which watches for changes:
-
-```bash
-pnpm run dev
-```
-
-Please note that you need to access File Browser's interface through the development server of the frontend.
-
 ### Backend
 
-First prepare the backend environment by downloading all required dependencies:
-
 ```bash
+# Download Go module dependencies
 go mod download
-```
 
-You can now build or run File Browser as any other Go project:
-
-```bash
 # Build
-go build
+go build -o filebrowser .
 
-# Run
-go run .
+# Run directly
+go run . -r /path/to/your/files
 ```
 
 ## Documentation
 
-Documentation lives in [`docs`](docs) as plain Markdown and is no longer built into a site. The command line reference in [`docs/cli`](docs/cli) is generated from the commands themselves:
+Documentation lives in [`docs/`](../docs/) and is built into a static site with [MkDocs](https://www.mkdocs.org/) and published to GitHub Pages.
+
+To preview the documentation locally:
 
 ```bash
-task docs:cli:generate
+pip install mkdocs-material
+mkdocs serve
 ```
 
-## Release
-
-To make a release, just run:
+The CLI reference pages in [`docs/cli/`](cli/) are generated from the commands themselves. After changing any CLI command, regenerate them:
 
 ```bash
-task release
+go run . cmds generate-docs docs/cli/
 ```
 
 ## Translations
 
-The Transifex integration stopped on 2026-09-01 and translations submitted there no longer reach this repository. Locale files live in [`frontend/src/i18n`](frontend/src/i18n) and can be edited directly.
+Locale files live in [`frontend/src/i18n/`](https://github.com/FilebrowserNext/filebrowserNEXT/tree/main/frontend/src/i18n) and can be edited directly. To add a new language, copy an existing locale file and translate the strings.
+
+## Release
+
+Releases are created via GitHub Actions. To trigger a release, push a Git tag:
+
+```bash
+git tag v3.x.x
+git push origin v3.x.x
+```
+
+The CI workflow builds binaries for all supported platforms (Linux amd64/arm64, macOS amd64/arm64, Windows amd64), packages them as archives, and publishes them to the GitHub release.
 
 ## Authentication Provider
 
-To build a new authentication provider, you need to implement the [Auther interface](https://github.com/filebrowser/filebrowser/blob/master/auth/auth.go), whose method will be called on the login page after the user has submitted their login data.
+To build a custom authentication provider, implement the `Auther` interface defined in [`auth/auth.go`](https://github.com/FilebrowserNext/filebrowserNEXT/blob/main/auth/auth.go):
 
 ```go
 // Auther is the authentication interface.
 type Auther interface {
     // Auth is called to authenticate a request.
-    Auth(r *http.Request, s *users.Storage, root string) (*users.User, error)
+    Auth(r *http.Request, usr users.Store, stg *settings.Settings, srv *settings.Server) (*users.User, error)
+    // LoginPage indicates if this auther needs a login page.
+    LoginPage() bool
 }
 ```
 
-After implementing the interface you should:
+After implementing the interface:
 
-1. Add it to [`auth` directory](https://github.com/filebrowser/filebrowser/blob/master/auth).
-2. Add it to the [configuration parser](https://github.com/filebrowser/filebrowser/blob/master/cmd/config.go) for the CLI.
-3. Add it to the [`authBackend.Get`](https://github.com/filebrowser/filebrowser/blob/master/storage/bolt/auth.go).
+1. Add it to the [`auth/`](https://github.com/FilebrowserNext/filebrowserNEXT/blob/main/auth) directory.
+2. Register it in the [configuration parser](https://github.com/FilebrowserNext/filebrowserNEXT/blob/main/cmd/config.go) (`addConfigFlags`).
+3. Register it in the auth storage backend.
 
-If you need to add more flags, please update the function `addConfigFlags`.
+## Code of Conduct
+
+By participating in this project you agree to abide by the [Code of Conduct](https://github.com/FilebrowserNext/filebrowserNEXT/blob/main/CODE_OF_CONDUCT.md).
 
