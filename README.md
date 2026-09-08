@@ -10,9 +10,16 @@
 
 <p align="center">
   <a href="https://filebrowsernext.github.io/filebrowserNEXT/"><img src="https://img.shields.io/badge/Documentation-GitHub_Pages-blue" alt="Documentation"/></a>
+  <a href="https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest"><img src="https://img.shields.io/badge/Release-v3.0.0--next-brightgreen" alt="Latest Release"/></a>
+  <a href="https://github.com/orgs/FilebrowserNext/packages/container/package/filebrowsernext"><img src="https://img.shields.io/badge/Docker-GHCR-blue?logo=docker&logoColor=white" alt="Docker GHCR"/></a>
+  <a href="https://github.com/FilebrowserNext/get"><img src="https://img.shields.io/badge/Install-get.sh-blueviolet" alt="Installer Script"/></a>
   <a href="#security-resolutions"><img src="https://img.shields.io/badge/Security-Hardened-success" alt="Security Hardened"/></a>
   <a href="#modern-ui--experience"><img src="https://img.shields.io/badge/UI-Modernized-indigo" alt="UI Modernized"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/></a>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/FilebrowserNext/.github/main/profile/demo.gif" width="700" alt="File Browser Next Live Demo" style="border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.25);" />
 </p>
 
 ---
@@ -136,6 +143,34 @@ docker run -d \
   -v /path/to/database:/database \
   ghcr.io/filebrowsernext/filebrowsernext:latest
 
+```
+
+### Running in the Background
+
+#### Quick Run (Nohup)
+
+```bash
+nohup filebrowser -r /path/to/your/files > filebrowser.log 2>&1 &
+```
+
+#### Production Service (Systemd)
+
+```bash
+sudo tee /etc/systemd/system/filebrowser.service > /dev/null <<EOF
+[Unit]
+Description=File Browser Next
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/filebrowser -r /path/to/your/files
+Restart=on-failure
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload && sudo systemctl enable --now filebrowser
 ```
 
 
