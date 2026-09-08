@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"strings"
 	"sync"
 	"time"
 
@@ -87,12 +88,28 @@ func (s *Storage) Gets(baseScope string, followExternalSymlinks bool) ([]*User, 
 	return users, err
 }
 
+func isSecurityUpdate(fields ...string) bool {
+	if len(fields) == 0 {
+		return true
+	}
+	for _, f := range fields {
+		switch strings.ToLower(f) {
+		case "password", "username", "perm", "lockpassword", "commands", "rules", "scope", "all":
+			return true
+		}
+	}
+	return false
+}
+
 // Update updates a user in the database.
 func (s *Storage) Update(user *User, fields ...string) error {
+	secUpdate := isSecurityUpdate(fields...)
 	now := time.Now().Unix()
-	user.UpdatedAt = now
-	if len(fields) > 0 {
-		fields = append(fields, "UpdatedAt")
+	if secUpdate {
+		user.UpdatedAt = now
+		if len(fields) > 0 {
+			fields = append(fields, "UpdatedAt")
+		}
 	}
 
 	err := user.Clean("", false, fields...)
@@ -105,9 +122,11 @@ func (s *Storage) Update(user *User, fields ...string) error {
 		return err
 	}
 
-	s.mux.Lock()
-	s.updated[user.ID] = now
-	s.mux.Unlock()
+	if secUpdate {
+		s.mux.Lock()
+		s.updated[user.ID] = now
+		s.mux.Unlock()
+	}
 	return nil
 }
 

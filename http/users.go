@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -221,21 +222,36 @@ var userPutHandler = withSelfOrAdmin(func(w http.ResponseWriter, r *http.Request
 			return http.StatusForbidden, nil
 		}
 
+		var suser *users.User
+		suser, err = d.store.Users.Get(d.server.Root, d.server.FollowExternalSymlinks, d.raw.(uint))
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+
+		pwdChanged := false
 		if req.Data.Password != "" {
 			req.Data.Password, err = users.ValidateAndHashPwd(req.Data.Password, d.settings.MinimumPasswordLength)
 			if err != nil {
 				return http.StatusBadRequest, err
 			}
+			pwdChanged = true
 		} else {
-			var suser *users.User
-			suser, err = d.store.Users.Get(d.server.Root, d.server.FollowExternalSymlinks, d.raw.(uint))
-			if err != nil {
-				return http.StatusInternalServerError, err
-			}
 			req.Data.Password = suser.Password
 		}
 
-		req.Which = []string{}
+		secChanged := pwdChanged ||
+			req.Data.Username != suser.Username ||
+			req.Data.Scope != suser.Scope ||
+			req.Data.LockPassword != suser.LockPassword ||
+			!reflect.DeepEqual(req.Data.Perm, suser.Perm) ||
+			!reflect.DeepEqual(req.Data.Commands, suser.Commands) ||
+			!reflect.DeepEqual(req.Data.Rules, suser.Rules)
+
+		if !secChanged {
+			req.Which = []string{"Locale", "ViewMode", "SingleClick", "RedirectAfterCopyMove", "DateFormat", "AceEditorTheme", "Sorting", "HideDotfiles"}
+		} else {
+			req.Which = []string{}
+		}
 	}
 
 	for k, v := range req.Which {

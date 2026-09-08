@@ -100,10 +100,10 @@ const submit = async (event: Event) => {
 
   try {
     if (createMode.value) {
-      await auth.signup(username.value, password.value);
+      await auth.signup(username.value.trim(), password.value);
     }
 
-    await auth.login(username.value, password.value, captcha);
+    await auth.login(username.value.trim(), password.value, captcha);
     router.push({ path: redirect });
   } catch (e: any) {
     // console.error(e);

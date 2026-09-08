@@ -48,3 +48,31 @@ func TestGetByScopeCaseInsensitive(t *testing.T) {
 		}
 	}
 }
+
+func TestGetByUsernameCaseInsensitive(t *testing.T) {
+	db, err := storm.Open(filepath.Join(t.TempDir(), "db"))
+	if err != nil {
+		t.Fatalf("open db: %v", err)
+	}
+	t.Cleanup(func() { _ = db.Close() })
+
+	st, err := NewStorage(db)
+	if err != nil {
+		t.Fatalf("new storage: %v", err)
+	}
+	if err := st.Users.Save(&users.User{Username: "admin", Password: "pw", Scope: "."}); err != nil {
+		t.Fatalf("save: %v", err)
+	}
+
+	for _, username := range []string{"admin", "Admin", "ADMIN"} {
+		u, err := st.Users.Get("", false, username)
+		if err != nil {
+			t.Errorf("Get(%q) unexpected error: %v", username, err)
+			continue
+		}
+		if u.Username != "admin" {
+			t.Errorf("Get(%q) returned %q, want admin", username, u.Username)
+		}
+	}
+}
+

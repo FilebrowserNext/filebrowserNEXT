@@ -115,3 +115,43 @@ func TestSaveProvisionedAllowsSharedExplicitScope(t *testing.T) {
 		t.Fatalf("%d users stored, want 2", len(back.users))
 	}
 }
+
+func TestUpdateSecurityVsPreference(t *testing.T) {
+	back := &slowBackend{}
+	store := NewStorage(back)
+
+	user := &User{
+		ID:        1,
+		Username:  "admin",
+		Password:  "hashed",
+		Scope:     ".",
+		Locale:    "en",
+		UpdatedAt: 1000,
+	}
+	_ = back.Save(user)
+
+	// Updating preference should not change UpdatedAt
+	user.Locale = "fr"
+	if err := store.Update(user, "Locale"); err != nil {
+		t.Fatalf("update: %v", err)
+	}
+	if user.UpdatedAt != 1000 {
+		t.Fatalf("expected UpdatedAt to remain 1000, got %d", user.UpdatedAt)
+	}
+	if store.LastUpdate(1) != 0 {
+		t.Fatalf("expected LastUpdate to be 0 for preference update, got %d", store.LastUpdate(1))
+	}
+
+	// Updating password should change UpdatedAt
+	user.Password = "newhashed"
+	if err := store.Update(user, "Password"); err != nil {
+		t.Fatalf("update: %v", err)
+	}
+	if user.UpdatedAt <= 1000 {
+		t.Fatalf("expected UpdatedAt to increase from 1000, got %d", user.UpdatedAt)
+	}
+	if store.LastUpdate(1) != user.UpdatedAt {
+		t.Fatalf("expected LastUpdate %d, got %d", user.UpdatedAt, store.LastUpdate(1))
+	}
+}
+

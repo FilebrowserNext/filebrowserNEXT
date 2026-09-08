@@ -35,6 +35,12 @@ func (st usersBackend) GetBy(i interface{}) (user *users.User, err error) {
 
 	if err != nil {
 		if errors.Is(err, storm.ErrNotFound) {
+			if username, ok := i.(string); ok {
+				pattern := "(?i)^" + regexp.QuoteMeta(username) + "$"
+				if errSelect := st.db.Select(q.Re("Username", pattern)).First(user); errSelect == nil {
+					return user, nil
+				}
+			}
 			return nil, fberrors.ErrNotExist
 		}
 		return nil, err
