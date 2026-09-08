@@ -15,7 +15,7 @@ import (
 type rateLimiter struct {
 	mu      sync.Mutex
 	entries map[string]*rlEntry
-	max     int
+	limit   int
 	window  time.Duration
 }
 
@@ -24,10 +24,10 @@ type rlEntry struct {
 	expiresAt time.Time
 }
 
-func newRateLimiter(max int, window time.Duration) *rateLimiter {
+func newRateLimiter(limit int, window time.Duration) *rateLimiter {
 	rl := &rateLimiter{
 		entries: make(map[string]*rlEntry),
-		max:     max,
+		limit:   limit,
 		window:  window,
 	}
 	go rl.gc()
@@ -46,12 +46,13 @@ func (rl *rateLimiter) allow(key string) bool {
 		rl.entries[key] = &rlEntry{count: 1, expiresAt: now.Add(rl.window)}
 		return true
 	}
-	if e.count >= rl.max {
+	if e.count >= rl.limit {
 		return false
 	}
 	e.count++
 	return true
 }
+
 
 // gc removes expired entries once per minute.
 func (rl *rateLimiter) gc() {
