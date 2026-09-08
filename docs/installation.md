@@ -38,6 +38,21 @@ Once installed, launch File Browser Next in a new terminal:
 filebrowser -r C:\path\to\your\files
 ```
 
+### Homebrew (macOS & Linux)
+
+Install directly with one command:
+
+```sh
+brew install FilebrowserNext/tap/filebrowser
+```
+
+Or tap the repository first:
+
+```sh
+brew tap FilebrowserNext/tap
+brew install filebrowser
+```
+
 ## Manual Binary Download
 
 If you prefer downloading and extracting the binary manually, pre-compiled archives are available on our [releases page](https://github.com/FilebrowserNext/filebrowserNEXT/releases).

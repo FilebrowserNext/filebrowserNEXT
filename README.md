@@ -13,6 +13,7 @@
   <a href="https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest"><img src="https://img.shields.io/badge/Release-v3.0.0--next-brightgreen" alt="Latest Release"/></a>
   <a href="https://github.com/orgs/FilebrowserNext/packages/container/package/filebrowsernext"><img src="https://img.shields.io/badge/Docker-GHCR-blue?logo=docker&logoColor=white" alt="Docker GHCR"/></a>
   <a href="https://github.com/FilebrowserNext/get"><img src="https://img.shields.io/badge/Install-get.sh-blueviolet" alt="Installer Script"/></a>
+  <a href="https://github.com/FilebrowserNext/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-Tap-orange?logo=homebrew&logoColor=white" alt="Homebrew Tap"/></a>
   <a href="#security-resolutions"><img src="https://img.shields.io/badge/Security-Hardened-success" alt="Security Hardened"/></a>
   <a href="#modern-ui--experience"><img src="https://img.shields.io/badge/UI-Modernized-indigo" alt="UI Modernized"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/></a>
@@ -106,6 +107,12 @@ Once installed, launch from any terminal:
 
 ```powershell
 filebrowser -r C:\path\to\your\files
+```
+
+### Homebrew (macOS & Linux)
+
+```bash
+brew install FilebrowserNext/tap/filebrowser
 ```
 
 ### Running with Docker
