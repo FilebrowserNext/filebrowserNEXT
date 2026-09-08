@@ -13,6 +13,8 @@ File Browser Next is actively maintained and receives regular security updates.
 
 File Browser Next incorporates native defenses against the vulnerabilities identified in legacy versions:
 - **Server-Side Token Revocation**: Dedicated token revocation backend ensuring immediate invalidation on logout, password changes, and renewal replay attacks.
+- **Targeted Session Invalidation**: Only security-sensitive updates (password, permissions, username, scope, rules) invalidate active sessions. Preference-only updates (language, theme, view mode) no longer silently log users out.
+- **Case-Insensitive Authentication**: Username lookup at login tolerates any casing, preventing frustrating 403 errors from trivial capitalization differences.
 - **Command Confinement & Sanitization**: Strict filesystem directory confinement and detection/filtering of dangerous shell metacharacters.
 
 ## Reporting a Vulnerability

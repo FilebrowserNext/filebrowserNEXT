@@ -15,6 +15,14 @@ All notable changes to this project will be documented in this file. See [commit
 * **commands:** detect and block dangerous shell metacharacters and chaining primitives in non-admin executions (#5199)
 * **commands:** execute non-admin binaries directly without arbitrary shell interpolation (#5199)
 
+### Bug Fixes (File Browser Next)
+
+* **auth:** updating user preferences (locale, view mode, theme) no longer invalidates active sessions; session invalidation is now restricted to security-sensitive changes (password, permissions, username, scope, rules)
+* **auth:** username lookup at login is now case-insensitive; typing "Admin" or "ADMIN" correctly authenticates as "admin"
+* **auth:** trim leading and trailing whitespace from username on the login form before sending to the server
+
+
+
 ### Features & UI Modernization
 
 * **ui:** redesigned design system with modern indigo and slate palette, soft shadows, and rounded corners

@@ -30,7 +30,7 @@ File Browser Next specifically resolves the critical security architecture issue
 ### 1. Session & JWT Revocation ([#5216](https://github.com/filebrowser/filebrowser/issues/5216) — Resolved)
 - **Persistent Server-Side Revocation Store**: Implemented a dedicated BoltDB-backed revocation store with in-memory fast-lookup caching and automatic expired token cleanup.
 - **Dedicated Logout Endpoint (`POST /api/logout`)**: Calling logout instantly revokes the JWT server-side via its cryptographic `jti` and clears client authentication cookies.
-- **Instant Invalidation on Password or Account Updates**: Every user account tracks an `UpdatedAt` timestamp. Any password change or permission change immediately invalidates all existing JWTs issued prior to that timestamp.
+- **Targeted Session Invalidation**: Every user account tracks an `UpdatedAt` timestamp. Only security-sensitive changes (password, permissions, username, scope, rules) invalidate existing sessions. Cosmetic preference updates (language, view mode, theme) no longer disconnect the user.
 - **Single-Use Token Renewal**: When renewing an active session token, the previous token (`jti`) is immediately revoked, preventing token replay attacks.
 - **Strict Error Handling**: Tokens referencing deleted users or invalid states now properly return `401 Unauthorized` instead of internal server errors.
 
@@ -38,6 +38,10 @@ File Browser Next specifically resolves the critical security architecture issue
 - **Strict Working Directory Confinement**: Execution working directories are strictly confined within the user's isolated scope using canonical path traversal checks (`filepath.Rel`). Commands can never escape their designated filesystem boundary.
 - **Shell Metacharacter Sanitization**: Non-admin executions strictly prohibit shell injection primitives (`;`, `&`, `|`, `` ` ``, `$`, `\n`, `>`, `<`) via `runner.HasDangerousShellMetachars()`.
 - **Safe Direct Binary Execution**: Non-admin commands execute binaries directly without passing strings through an unconstrained shell interpreter.
+
+### 3. Authentication Usability Bugs (Resolved)
+- **Case-Insensitive Login**: Username lookup at login is now case-insensitive. Typing `Admin` or `ADMIN` correctly authenticates as `admin`, matching the behavior users expect.
+- **No Spurious Logouts on Preference Save**: In the original codebase, saving any user preference (language, view mode, etc.) updated `UpdatedAt` and silently invalidated the active session, forcing a re-login. This is now fixed.
 
 ---
 
