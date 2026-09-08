@@ -1,0 +1,137 @@
+site_name: File Browser Next
+site_description: 'A modern, secure web-based file browser and cloud file manager'
+site_author: 'File Browser Next Contributors'
+site_url: 'https://filebrowsernext.github.io/filebrowserNEXT/'
+
+repo_name: 'FilebrowserNext/filebrowserNEXT'
+repo_url: 'https://github.com/FilebrowserNext/filebrowserNEXT'
+
+copyright: 'Copyright &copy; 2026 File Browser Next Contributors'
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  logo: static/logo.png
+  favicon: static/favicon.png
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+
+  font:
+    text: Inter
+    code: Roboto Mono
+
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - navigation.top
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - toc.follow
+
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+plugins:
+  - search:
+      separator: '[\s\-\/]+'
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - smarty
+  - sane_lists
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.caret
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - callouts
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/FilebrowserNext/filebrowserNEXT
+
+nav:
+  - Home: index.md
+  - Documentation:
+    - Installation: installation.md
+    - Configuration:
+      - customization.md
+      - authentication.md
+      - command-execution.md
+    - Troubleshooting: troubleshooting.md
+    - Deployment: deployment.md
+    - Command Line Usage:
+      - cli/filebrowser.md
+      - cli/filebrowser-cmds.md
+      - cli/filebrowser-cmds-add.md
+      - cli/filebrowser-cmds-ls.md
+      - cli/filebrowser-cmds-rm.md
+      - cli/filebrowser-completion.md
+      - cli/filebrowser-completion-bash.md
+      - cli/filebrowser-completion-fish.md
+      - cli/filebrowser-completion-powershell.md
+      - cli/filebrowser-completion-zsh.md
+      - cli/filebrowser-config.md
+      - cli/filebrowser-config-cat.md
+      - cli/filebrowser-config-export.md
+      - cli/filebrowser-config-import.md
+      - cli/filebrowser-config-init.md
+      - cli/filebrowser-config-set.md
+      - cli/filebrowser-hash.md
+      - cli/filebrowser-rules.md
+      - cli/filebrowser-rules-add.md
+      - cli/filebrowser-rules-ls.md
+      - cli/filebrowser-rules-rm.md
+      - cli/filebrowser-users.md
+      - cli/filebrowser-users-add.md
+      - cli/filebrowser-users-export.md
+      - cli/filebrowser-users-find.md
+      - cli/filebrowser-users-import.md
+      - cli/filebrowser-users-ls.md
+      - cli/filebrowser-users-rm.md
+      - cli/filebrowser-users-update.md
+      - cli/filebrowser-version.md
+  - Contributing: contributing.md
+  - Security Policy: security.md
+  - Changelog: changelog.md
