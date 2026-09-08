@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. See [commit
 * **auth:** return HTTP 401 instead of internal server error when handling tokens for deleted users
 * **auth:** rate-limit POST /api/login to 10 attempts per IP per 5 minutes to prevent brute force (returns HTTP 429)
 * **auth:** rate-limit password attempts on protected public shares to 10 per IP per share per 5 minutes
+* **auth:** proxy headers (CF-Connecting-IP, X-Real-IP, X-Forwarded-For) are now trusted only when the direct TCP connection originates from a private or loopback address; public clients can no longer forge a fake IP to bypass rate limiting — compatible with Cloudflare, Caddy, Nginx, and Pangolin
 * **http:** add X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy and Permissions-Policy to all responses
 * **commands:** strictly confine working directories inside user scope using filepath.Rel (#5199)
 * **commands:** detect and block dangerous shell metacharacters and chaining primitives in non-admin executions (#5199)

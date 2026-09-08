@@ -43,9 +43,10 @@ File Browser Next specifically resolves the critical security architecture issue
 - **Case-Insensitive Login**: Username lookup at login is now case-insensitive. Typing `Admin` or `ADMIN` correctly authenticates as `admin`, matching the behavior users expect.
 - **No Spurious Logouts on Preference Save**: In the original codebase, saving any user preference (language, view mode, etc.) updated `UpdatedAt` and silently invalidated the active session, forcing a re-login. This is now fixed.
 
-### 4. Brute Force Protection (New)
+### 4. Brute Force Protection with Reverse-Proxy Awareness (New)
 - **Login Rate Limiting**: `POST /api/login` is limited to 10 attempts per IP per 5-minute window. Exceeding the limit returns `HTTP 429 Too Many Requests`. Legitimate users connecting normally are never affected.
-- **Share Password Rate Limiting**: Password attempts on protected public shares are limited to 10 per IP per share per 5-minute window, preventing offline-style brute force of share passwords.
+- **Share Password Rate Limiting**: Password attempts on protected public shares are limited to 10 per IP per share per 5-minute window.
+- **Secure Proxy-Aware IP Detection**: The real client IP is resolved correctly whether the app is exposed directly or placed behind a reverse proxy (Cloudflare, Caddy, Nginx, Pangolin, etc.). Proxy headers (`CF-Connecting-IP`, `X-Real-IP`, `X-Forwarded-For`) are trusted **only when the direct TCP connection comes from a private or loopback address** (i.e. from a local proxy). When the app is accessed directly from the internet, these headers are ignored entirely — a public client cannot forge a fake IP to bypass rate limiting.
 
 ### 5. Hardened HTTP Security Headers (New)
 All API and page responses now include the following headers in addition to `Content-Security-Policy`:
