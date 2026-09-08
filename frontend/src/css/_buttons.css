@@ -1,23 +1,35 @@
 .button {
   outline: 0;
   border: 0;
-  padding: 0.5em 1em;
-  border-radius: 0.1em;
+  padding: 0.6em 1.25em;
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
-  background: var(--blue);
-  color: white;
-  border: 1px solid var(--divider);
-  box-shadow: 0 0 5px var(--divider);
-  transition: 0.1s ease all;
+  background: var(--primary-gradient, var(--blue));
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.95em;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
 }
 
 .button:hover {
-  background-color: var(--dark-blue);
+  background: var(--dark-blue);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(0);
 }
 
 .button--block {
-  margin: 0 0 0.5em;
-  display: block;
+  margin: 0 0 0.75em;
+  display: flex;
   width: 100%;
 }
 
@@ -25,31 +37,40 @@
   background: var(--red);
 }
 
+.button--red:hover {
+  background: var(--dark-red);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
 .button--blue {
   background: var(--blue);
 }
 
 .button--flat {
-  color: var(--dark-blue);
+  color: var(--blue);
   background: transparent;
-  box-shadow: 0 0 0;
-  border: 0;
-  text-transform: uppercase;
+  box-shadow: none;
+  border: 1px solid transparent;
+  font-weight: 500;
 }
 
 .button--flat:hover {
-  background: var(--surfaceSecondary);
+  background: var(--hover);
+  box-shadow: none;
+  transform: none;
 }
 
 .button--flat.button--red {
-  color: var(--dark-red);
+  color: var(--red);
 }
 
 .button--flat.button--grey {
-  color: #6f6f6f;
+  color: var(--textPrimary);
 }
 
 .button[disabled] {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }

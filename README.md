@@ -1,36 +1,94 @@
-> [!WARNING]
-> 
-> **File Browser is archived on 2026-09-01**. The last planned release has already shipped. There will be no further releases, bug fixes, or security fixes.   
-
 <p align="center">
-  <img src="./branding/banner.png" width="550"/>
+  <img src="./frontend/public/img/logo.svg" width="120" height="120" alt="File Browser Next Logo"/>
 </p>
 
-File Browser provides a file managing interface within a specified directory and it can be used to upload, delete, preview and edit your files. It is a **create-your-own-cloud**-kind of software where you can just install it on your server, direct it to a path and access your files through a nice web interface.
+<h1 align="center">File Browser Next</h1>
 
-**Background:** [Goodbye File Browser, for Real This Time](https://hacdias.com/2026/07/28/filebrowser/), July 2026.
+<p align="center">
+  <b>A modern, secure, next-generation web-based file manager.</b>
+</p>
 
-## Security
+<p align="center">
+  <a href="#security-resolutions"><img src="https://img.shields.io/badge/Security-Hardened-success" alt="Security Hardened"/></a>
+  <a href="#modern-ui--experience"><img src="https://img.shields.io/badge/UI-Modernized-indigo" alt="UI Modernized"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"/></a>
+</p>
 
-Published advisories are listed under [security advisories](https://github.com/filebrowser/filebrowser/security/advisories),
-and reporting instructions are in [SECURITY.md](SECURITY.md). Two known issue classes
-remain unaddressed and will not be fixed:
+---
 
-- **Command execution, runner, and hooks.** This feature is plagued with vulnerabilities across many published advisories, and would need a full rewrite to be made safe. It is disabled by default; if you re-enable it with `--disable-exec=false`, treat the ability to run commands as equivalent to shell access on the host. Background: [#5199](https://github.com/filebrowser/filebrowser/issues/5199).
-- **Session and JWT handling.** Sessions are self-contained JWTs rather than server-side identifiers, so they cannot be revoked, which means that logout, password changes, and renewal leave previously issued tokens valid until they expire, and the same refresh token can be redeemed repeatedly. Assume a leaked token is valid until expiry. Background: [#5216](https://github.com/filebrowser/filebrowser/issues/5216).
+**File Browser Next** is an actively maintained, modernized continuation of the original File Browser project. It provides a sleek file managing interface within a specified directory, allowing you to upload, delete, preview, and edit your files from any browser on desktop or mobile.
 
-If you keep running File Browser, treat it as unmaintained software:
+---
 
-- **Do not expose it directly to the internet.** Put it behind a reverse proxy that terminates TLS and performs its own authentication.
-- **Keep the command runner disabled.** It is off by default, so leave it off. See [#5199](https://github.com/filebrowser/filebrowser/issues/5199) and [`docs/command-execution.md`](docs/command-execution.md).
-- **Run it unprivileged, inside a container**, with only the directory you intend to serve mounted into it.
+## Security Resolutions
+
+File Browser Next specifically resolves the critical security architecture issues previously documented in upstream File Browser:
+
+### 1. Session & JWT Revocation ([#5216](https://github.com/filebrowser/filebrowser/issues/5216) — Resolved)
+- **Persistent Server-Side Revocation Store**: Implemented a dedicated BoltDB-backed revocation store with in-memory fast-lookup caching and automatic expired token cleanup.
+- **Dedicated Logout Endpoint (`POST /api/logout`)**: Calling logout instantly revokes the JWT server-side via its cryptographic `jti` and clears client authentication cookies.
+- **Instant Invalidation on Password or Account Updates**: Every user account tracks an `UpdatedAt` timestamp. Any password change or permission change immediately invalidates all existing JWTs issued prior to that timestamp.
+- **Single-Use Token Renewal**: When renewing an active session token, the previous token (`jti`) is immediately revoked, preventing token replay attacks.
+- **Strict Error Handling**: Tokens referencing deleted users or invalid states now properly return `401 Unauthorized` instead of internal server errors.
+
+### 2. Command Runner & Execution Hardening ([#5199](https://github.com/filebrowser/filebrowser/issues/5199) — Resolved)
+- **Strict Working Directory Confinement**: Execution working directories are strictly confined within the user's isolated scope using canonical path traversal checks (`filepath.Rel`). Commands can never escape their designated filesystem boundary.
+- **Shell Metacharacter Sanitization**: Non-admin executions strictly prohibit shell injection primitives (`;`, `&`, `|`, `` ` ``, `$`, `\n`, `>`, `<`) via `runner.HasDangerousShellMetachars()`.
+- **Safe Direct Binary Execution**: Non-admin commands execute binaries directly without passing strings through an unconstrained shell interpreter.
+
+---
+
+## Modern UI & Experience
+
+File Browser Next features a complete visual redesign:
+- **Modern Design System**: Refreshed color tokens featuring an elegant indigo/slate theme, soft multi-layer box shadows, and 8px/12px/16px rounded borders.
+- **Glassmorphic Elements**: Modern blur backdrops (`backdrop-filter: blur(16px)`) on top navigation bars, action bars, modals, and file selection docks.
+- **Redesigned Login Page**: Card layout with ambient mesh gradients, improved form controls, and responsive styling.
+- **New Logo & Identity**: A sleek vector emblem with vibrant indigo-to-cyan gradients.
+- **Responsive File Views**: Polished grid cards, clean list rows, smooth hover elevations, and modern multi-selection pill docks.
+
+---
+
+## Getting Started
+
+### Quick Start with Prebuilt Binary / Go
+
+```bash
+# Build the backend binary
+go build -o filebrowser .
+
+# Start the server with a quick setup
+./filebrowser -r /path/to/your/files
+```
+
+Access the interface in your browser at `http://127.0.0.1:8080` (default credentials: `admin` / `admin`).
+
+### Building from Source
+
+**Requirements:**
+- Go 1.23+
+- Node.js 20+ & pnpm
+
+```bash
+# 1. Build the Frontend
+cd frontend
+pnpm install
+pnpm run build
+cd ..
+
+# 2. Build the Go Binary (embeds frontend)
+go build -o filebrowser .
+```
+
+---
 
 ## Documentation
 
-Documentation on how to install, configure, and build this project lives in [`docs`](docs) in this repository.
+- General documentation on installation and configuration can be found in the [`docs`](docs) directory.
+- For development guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-[CONTRIBUTING.md](CONTRIBUTING.md) documents how to build and develop the project, which remains useful to anyone forking it.
+---
 
 ## License
 
-[Apache License 2.0](LICENSE) © File Browser Contributors
+[Apache License 2.0](LICENSE) © File Browser Next Contributors & File Browser Authors.

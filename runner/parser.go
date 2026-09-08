@@ -4,6 +4,17 @@ import (
 	"github.com/filebrowser/filebrowser/v2/settings"
 )
 
+// HasDangerousShellMetachars checks if a command contains shell injection characters.
+func HasDangerousShellMetachars(s string) bool {
+	for _, ch := range s {
+		switch ch {
+		case ';', '&', '|', '`', '$', '\n', '\r', '>', '<', '(', ')':
+			return true
+		}
+	}
+	return false
+}
+
 // ParseCommand parses the command taking in account if the current
 // instance uses a shell to run the commands or just calls the binary
 // directly.

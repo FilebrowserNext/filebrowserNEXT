@@ -76,7 +76,7 @@ func init() {
 
 	cobra.MousetrapHelpText = ""
 
-	rootCmd.SetVersionTemplate("File Browser version {{printf \"%s\" .Version}}\n")
+	rootCmd.SetVersionTemplate("File Browser Next version {{printf \"%s\" .Version}}\n")
 
 	// Flags available across the whole program
 	persistent := rootCmd.PersistentFlags()
@@ -117,12 +117,12 @@ func addServerFlags(flags *pflag.FlagSet) {
 
 var rootCmd = &cobra.Command{
 	Use:   "filebrowser",
-	Short: "A stylish web-based file browser",
-	Long: `File Browser CLI lets you create the database to use with File Browser,
+	Short: "A modern, stylish web-based file browser",
+	Long: `File Browser Next CLI lets you create the database to use with File Browser Next,
 manage your users and all the configurations without accessing the
 web interface.
 
-If you've never run File Browser, you'll need to have a database for
+If you've never run File Browser Next, you'll need to have a database for
 it. Don't worry: you don't need to setup a separate database server.
 We're using Bolt DB which is a single file database and all managed
 by ourselves.
@@ -133,7 +133,7 @@ The environment variables are prefixed by "FB_" followed by the flag name in
 UPPER_SNAKE_CASE. For example, the flag "--disablePreviewResize" is available
 as FB_DISABLE_PREVIEW_RESIZE.
 
-If "--config" is not specified, File Browser will look for a configuration
+If "--config" is not specified, File Browser Next will look for a configuration
 file named .filebrowser.{json, toml, yaml, yml} in the following directories:
 
 - ./
@@ -153,7 +153,7 @@ The precedence of the configuration values are as follows:
 - Database values
 - Defaults
 
-Also, if the database path doesn't exist, File Browser will enter into
+Also, if the database path doesn't exist, File Browser Next will enter into
 the quick setup mode and a new database will be bootstrapped and a new
 user created with the credentials from options "username" and "password".`,
 	RunE: withViperAndStore(func(_ *cobra.Command, _ []string, v *viper.Viper, st *store) error {
@@ -192,10 +192,7 @@ user created with the credentials from options "username" and "password".`,
 		}
 		setupLog(server.Log)
 
-		log.Println("NOTICE: File Browser is being wound down.")
-		log.Println("NOTICE: The project is archived on 2026-09-01, after which there will be no")
-		log.Println("NOTICE: further releases and no security fixes. Known unfixed issues are at")
-		log.Println("NOTICE: https://github.com/filebrowser/filebrowser/security/advisories")
+		log.Println("Starting File Browser Next...")
 
 		root, err := filepath.Abs(server.Root)
 		if err != nil {
@@ -394,7 +391,7 @@ func getServerSettings(v *viper.Viper, st *storage.Storage) (*settings.Server, e
 		if !set.CreateUserDir && scopeIsRoot {
 			log.Println("WARNING: Signup is enabled without createUserDir and the default scope is")
 			log.Println("WARNING: the server root, so every self-registered user can read, modify and")
-			log.Println("WARNING: delete all files File Browser serves, including other users' files.")
+			log.Println("WARNING: delete all files File Browser Next serves, including other users' files.")
 			log.Println("WARNING: Enable createUserDir, or set a default scope other than the root.")
 		}
 	}

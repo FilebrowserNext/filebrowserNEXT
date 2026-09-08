@@ -1,6 +1,8 @@
 package fbhttp
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"log"
@@ -126,15 +128,27 @@ func withUser(fn handleFunc) handleFunc {
 			return http.StatusUnauthorized, nil
 		}
 
-		expiresSoon := tk.ExpiresAt != nil && time.Until(tk.ExpiresAt.Time) < time.Hour
-		updated := tk.IssuedAt != nil && tk.IssuedAt.Unix() < d.store.Users.LastUpdate(tk.User.ID)
+		// Check if token was explicitly revoked
+		if tk.ID != "" && d.store.Revocation != nil && d.store.Revocation.IsRevoked(tk.ID) {
+			return http.StatusUnauthorized, nil
+		}
 
-		if expiresSoon || updated {
+		// Check if user credentials or permissions were updated after this token was issued
+		lastUpdate := d.store.Users.LastUpdate(tk.User.ID)
+		if tk.IssuedAt != nil && lastUpdate > 0 && tk.IssuedAt.Unix() < lastUpdate {
+			return http.StatusUnauthorized, nil
+		}
+
+		expiresSoon := tk.ExpiresAt != nil && time.Until(tk.ExpiresAt.Time) < time.Hour
+		if expiresSoon {
 			w.Header().Add("X-Renew-Token", "true")
 		}
 
 		d.user, err = d.store.Users.Get(d.server.Root, d.server.FollowExternalSymlinks, tk.User.ID)
 		if err != nil {
+			if errors.Is(err, fberrors.ErrNotExist) {
+				return http.StatusUnauthorized, nil
+			}
 			return http.StatusInternalServerError, err
 		}
 
@@ -242,14 +256,54 @@ var signupHandler = func(w http.ResponseWriter, r *http.Request, d *data) (int, 
 	return http.StatusOK, nil
 }
 
+var logoutHandler = withUser(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
+	keyFunc := func(_ *jwt.Token) (interface{}, error) {
+		return d.settings.Key, nil
+	}
+	var tk authToken
+	p := jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}), jwt.WithExpirationRequired())
+	token, err := request.ParseFromRequest(r, &extractor{}, keyFunc, request.WithClaims(&tk), request.WithParser(p))
+	if err == nil && token != nil && token.Valid && tk.ID != "" && d.store.Revocation != nil && tk.ExpiresAt != nil {
+		_ = d.store.Revocation.Revoke(tk.ID, tk.ExpiresAt.Time)
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	w.WriteHeader(http.StatusOK)
+	return 0, nil
+})
+
 func renewHandler(tokenExpireTime time.Duration) handleFunc {
 	return withUser(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
+		// Revoke the old token so it cannot be redeemed repeatedly
+		keyFunc := func(_ *jwt.Token) (interface{}, error) {
+			return d.settings.Key, nil
+		}
+		var tk authToken
+		p := jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}), jwt.WithExpirationRequired())
+		token, err := request.ParseFromRequest(r, &extractor{}, keyFunc, request.WithClaims(&tk), request.WithParser(p))
+		if err == nil && token != nil && token.Valid && tk.ID != "" && d.store.Revocation != nil && tk.ExpiresAt != nil {
+			_ = d.store.Revocation.Revoke(tk.ID, tk.ExpiresAt.Time)
+		}
+
 		w.Header().Set("X-Renew-Token", "false")
 		return printToken(w, r, d, d.user, tokenExpireTime)
 	})
 }
 
 func printToken(w http.ResponseWriter, _ *http.Request, d *data, user *users.User, tokenExpirationTime time.Duration) (int, error) {
+	jtiBytes := make([]byte, 16)
+	if _, err := rand.Read(jtiBytes); err != nil {
+		return http.StatusInternalServerError, err
+	}
+	jti := hex.EncodeToString(jtiBytes)
+
 	claims := &authToken{
 		User: userInfo{
 			ID:                    user.ID,
@@ -266,9 +320,10 @@ func printToken(w http.ResponseWriter, _ *http.Request, d *data, user *users.Use
 			AceEditorTheme:        user.AceEditorTheme,
 		},
 		RegisteredClaims: jwt.RegisteredClaims{
+			ID:        jti,
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(tokenExpirationTime)),
-			Issuer:    "File Browser",
+			Issuer:    "File Browser Next",
 		},
 	}
 

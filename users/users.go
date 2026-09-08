@@ -36,6 +36,7 @@ type User struct {
 	HideDotfiles          bool          `json:"hideDotfiles"`
 	DateFormat            bool          `json:"dateFormat"`
 	AceEditorTheme        string        `json:"aceEditorTheme"`
+	UpdatedAt             int64         `json:"updatedAt"`
 }
 
 // GetRules implements rules.Provider.
@@ -51,6 +52,7 @@ var checkableFields = []string{
 	"Commands",
 	"Sorting",
 	"Rules",
+	"UpdatedAt",
 }
 
 // Clean cleans up a user and verifies if all its fields

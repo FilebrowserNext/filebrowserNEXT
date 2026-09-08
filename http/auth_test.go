@@ -149,3 +149,128 @@ func TestExpiredTokenNeedsProxyAssertion(t *testing.T) {
 		}
 	})
 }
+
+func TestSessionRevocationOnLogoutAndRenew(t *testing.T) {
+	key := []byte("test-signing-key")
+	perm := users.Permissions{Download: true}
+	st := scopedUserStorage(t, t.TempDir(), perm, key)
+	server := &settings.Server{}
+
+	protected := withUser(func(w http.ResponseWriter, _ *http.Request, _ *data) (int, error) {
+		_, writeErr := w.Write([]byte("ok"))
+		return 0, writeErr
+	})
+
+	// Login
+	user, err := st.Users.Get("", false, uint(1))
+	if err != nil {
+		t.Fatalf("failed to get user: %v", err)
+	}
+
+	loginRec := httptest.NewRecorder()
+	loginReq, _ := http.NewRequest(http.MethodGet, "/login", http.NoBody)
+	_, _ = printToken(loginRec, loginReq, &data{settings: &settings.Settings{Key: key}}, user, time.Hour)
+	token1 := loginRec.Body.String()
+
+	// Verify token1 works
+	req, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	req.Header.Set("X-Auth", token1)
+	rec := httptest.NewRecorder()
+	handle(protected, "", st, server).ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("token1 expected 200, got %d", rec.Code)
+	}
+
+	// Renew token1 -> get token2
+	renewReq, _ := http.NewRequest(http.MethodPost, "/renew", http.NoBody)
+	renewReq.Header.Set("X-Auth", token1)
+	renewRec := httptest.NewRecorder()
+	handle(renewHandler(time.Hour), "", st, server).ServeHTTP(renewRec, renewReq)
+	if renewRec.Code != http.StatusOK {
+		t.Fatalf("renew expected 200, got %d", renewRec.Code)
+	}
+	token2 := renewRec.Body.String()
+
+	// Verify token1 is now REVOKED and rejected with 401
+	reqOld, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	reqOld.Header.Set("X-Auth", token1)
+	recOld := httptest.NewRecorder()
+	handle(protected, "", st, server).ServeHTTP(recOld, reqOld)
+	if recOld.Code != http.StatusUnauthorized {
+		t.Fatalf("reused token1 expected 401, got %d", recOld.Code)
+	}
+
+	// Verify token2 works
+	req2, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	req2.Header.Set("X-Auth", token2)
+	rec2 := httptest.NewRecorder()
+	handle(protected, "", st, server).ServeHTTP(rec2, req2)
+	if rec2.Code != http.StatusOK {
+		t.Fatalf("token2 expected 200, got %d", rec2.Code)
+	}
+
+	// Logout token2
+	logoutReq, _ := http.NewRequest(http.MethodPost, "/logout", http.NoBody)
+	logoutReq.Header.Set("X-Auth", token2)
+	logoutRec := httptest.NewRecorder()
+	handle(logoutHandler, "", st, server).ServeHTTP(logoutRec, logoutReq)
+	if logoutRec.Code != http.StatusOK {
+		t.Fatalf("logout expected 200, got %d", logoutRec.Code)
+	}
+
+	// Verify token2 is now REVOKED and rejected with 401
+	reqLoggedOut, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	reqLoggedOut.Header.Set("X-Auth", token2)
+	recLoggedOut := httptest.NewRecorder()
+	handle(protected, "", st, server).ServeHTTP(recLoggedOut, reqLoggedOut)
+	if recLoggedOut.Code != http.StatusUnauthorized {
+		t.Fatalf("logged out token2 expected 401, got %d", recLoggedOut.Code)
+	}
+}
+
+func TestTokenInvalidationOnUserUpdate(t *testing.T) {
+	key := []byte("test-signing-key")
+	perm := users.Permissions{Download: true}
+	st := scopedUserStorage(t, t.TempDir(), perm, key)
+	server := &settings.Server{}
+
+	protected := withUser(func(w http.ResponseWriter, _ *http.Request, _ *data) (int, error) {
+		_, writeErr := w.Write([]byte("ok"))
+		return 0, writeErr
+	})
+
+	user, err := st.Users.Get("", false, uint(1))
+	if err != nil {
+		t.Fatalf("failed to get user: %v", err)
+	}
+
+	loginRec := httptest.NewRecorder()
+	loginReq, _ := http.NewRequest(http.MethodGet, "/login", http.NoBody)
+	_, _ = printToken(loginRec, loginReq, &data{settings: &settings.Settings{Key: key}}, user, time.Hour)
+	token := loginRec.Body.String()
+
+	// Verify token works
+	req, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	req.Header.Set("X-Auth", token)
+	rec := httptest.NewRecorder()
+	handle(protected, "", st, server).ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("token expected 200, got %d", rec.Code)
+	}
+
+	// Change password / update user (simulate time delay so update timestamp > token issued timestamp)
+	time.Sleep(1100 * time.Millisecond)
+	user.Password = "newpassword"
+	if err := st.Users.Update(user, "Password"); err != nil {
+		t.Fatalf("failed to update user: %v", err)
+	}
+
+	// Previously issued token must now be rejected with 401
+	recUpdated := httptest.NewRecorder()
+	reqUpdated, _ := http.NewRequest(http.MethodGet, "/", http.NoBody)
+	reqUpdated.Header.Set("X-Auth", token)
+	handle(protected, "", st, server).ServeHTTP(recUpdated, reqUpdated)
+	if recUpdated.Code != http.StatusUnauthorized {
+		t.Fatalf("token after password change expected 401, got %d", recUpdated.Code)
+	}
+}

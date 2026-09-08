@@ -2,8 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [2.63.23](https://github.com/filebrowser/filebrowser/compare/v2.63.22...v2.63.23) (2026-07-27)
-## [2.63.22](https://github.com/filebrowser/filebrowser/compare/v2.63.21...v2.63.22) (2026-07-27)
+## File Browser Next 3.0.0-next (2026-09-08)
+
+### Security Fixes
+
+* **auth:** implement persistent BoltDB server-side token revocation store with in-memory TTL caching (#5216)
+* **auth:** add dedicated POST /api/logout endpoint for instant token revocation and cookie clearing (#5216)
+* **auth:** invalidate all active sessions immediately upon password change or account update via user UpdatedAt tracking (#5216)
+* **auth:** revoke prior token during session renewal to prevent token replay attacks (#5216)
+* **auth:** return HTTP 401 instead of internal server error when handling tokens for deleted users
+* **commands:** strictly confine working directories inside user scope using filepath.Rel (#5199)
+* **commands:** detect and block dangerous shell metacharacters and chaining primitives in non-admin executions (#5199)
+* **commands:** execute non-admin binaries directly without arbitrary shell interpolation (#5199)
+
+### Features & UI Modernization
+
+* **ui:** redesigned design system with modern indigo and slate palette, soft shadows, and rounded corners
+* **ui:** modern glassmorphic header and action bars with background blur
+* **ui:** redesigned login page with ambient gradients, improved inputs, and responsive layout
+* **ui:** modernized file listing grid cards, list rows, and multi-selection floating dock
+* **branding:** create new vector SVG logo and icon badges in branding/ and frontend/
+* **branding:** rebrand project from File Browser to File Browser Next across frontend, CLI, and documentation
+* **cli:** update CLI banners, help text, and remove winding-down archive notices
+
 
 ### Bug Fixes
 

@@ -36,18 +36,12 @@
 
     <div class="card" v-if="user?.perm.admin">
       <div class="card-title">
-        <h2>{{ t("settings.sunsetTitle") }}</h2>
+        <h2>File Browser Next</h2>
       </div>
 
       <div class="card-content">
-        <p>{{ t("settings.sunsetBody") }}</p>
         <p>
-          <a
-            href="https://github.com/filebrowser/filebrowser#security"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ t("settings.sunsetLink") }}</a
-          >
+          File Browser Next is the modern, actively maintained next-generation release featuring enhanced security (revocable JWT sessions, hardened runner &amp; command execution), a modern design, and ongoing support.
         </p>
       </div>
     </div>

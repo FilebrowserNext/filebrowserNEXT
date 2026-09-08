@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
 
-    <title>File Browser</title>
+    <title>File Browser Next</title>
 
     <link rel="icon" type="image/svg+xml" href="/img/icons/favicon.svg" />
     <link rel="shortcut icon" href="/img/icons/favicon.ico" />
@@ -17,7 +17,7 @@
       sizes="180x180"
       href="/img/icons/apple-touch-icon.png"
     />
-    <meta name="apple-mobile-web-app-title" content="File Browser" />
+    <meta name="apple-mobile-web-app-title" content="File Browser Next" />
 
     <!-- Add to home screen for Android and modern mobile browsers -->
     <link
@@ -25,7 +25,7 @@
       id="manifestPlaceholder"
       crossorigin="use-credentials"
     />
-    <meta name="theme-color" content="#2979ff" />
+    <meta name="theme-color" content="#6366f1" />
 
     <!-- Inject Some Variables and generate the manifest json -->
     <script>
@@ -56,8 +56,8 @@
         return `${window.FileBrowser.StaticURL}/${url.replace(/^\/+/, "")}`;
       };
       var dynamicManifest = {
-        name: window.FileBrowser.Name || "File Browser",
-        short_name: window.FileBrowser.Name || "File Browser",
+        name: window.FileBrowser.Name || "File Browser Next",
+        short_name: window.FileBrowser.Name || "File Browser Next",
         icons: [
           {
             src: window.__prependStaticUrl(

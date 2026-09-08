@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"path/filepath"
 	"slices"
 	"strings"
 	"time"
@@ -69,7 +70,18 @@ var commandsHandler = withUser(func(w http.ResponseWriter, r *http.Request, d *d
 		return 0, nil
 	}
 
-	command, name, err := runner.ParseCommand(d.settings, raw)
+	// Ensure working directory is strictly confined within user scope
+	targetDir := d.user.FullPath(r.URL.Path)
+	userBasePath := d.user.FullPath("/")
+	rel, err := filepath.Rel(userBasePath, targetDir)
+	if err != nil || strings.HasPrefix(rel, "..") {
+		if err := conn.WriteMessage(websocket.TextMessage, cmdNotAllowed); err != nil {
+			wsErr(conn, r, http.StatusInternalServerError, err)
+		}
+		return 0, nil
+	}
+
+	name, args, err := runner.SplitCommandAndArgs(raw)
 	if err != nil {
 		if err := conn.WriteMessage(websocket.TextMessage, []byte(err.Error())); err != nil {
 			wsErr(conn, r, http.StatusInternalServerError, err)
@@ -85,8 +97,30 @@ var commandsHandler = withUser(func(w http.ResponseWriter, r *http.Request, d *d
 		return 0, nil
 	}
 
+	var command []string
+	if !d.user.Perm.Admin {
+		// Disallow dangerous shell metacharacters for non-admin executions
+		if runner.HasDangerousShellMetachars(raw) {
+			if err := conn.WriteMessage(websocket.TextMessage, cmdNotAllowed); err != nil {
+				wsErr(conn, r, http.StatusInternalServerError, err)
+			}
+			return 0, nil
+		}
+		// Direct binary invocation without permissive shell command chaining
+		command = append([]string{name}, args...)
+	} else {
+		cmdParts, _, pErr := runner.ParseCommand(d.settings, raw)
+		if pErr != nil {
+			if err := conn.WriteMessage(websocket.TextMessage, []byte(pErr.Error())); err != nil {
+				wsErr(conn, r, http.StatusInternalServerError, err)
+			}
+			return 0, nil
+		}
+		command = cmdParts
+	}
+
 	cmd := exec.Command(command[0], command[1:]...)
-	cmd.Dir = d.user.FullPath(r.URL.Path)
+	cmd.Dir = targetDir
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {

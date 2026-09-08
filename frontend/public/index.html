@@ -13,7 +13,7 @@
     [{[ end ]}]
 
     <title>
-      [{[ if .Name -]}][{[ .Name ]}][{[ else ]}]File Browser[{[ end ]}]
+      [{[ if .Name -]}][{[ .Name ]}][{[ else ]}]File Browser Next[{[ end ]}]
     </title>
 
     <meta name="robots" content="noindex,nofollow" />
@@ -29,7 +29,7 @@
       sizes="180x180"
       href="[{[ .StaticURL ]}]/img/icons/apple-touch-icon.png"
     />
-    <meta name="apple-mobile-web-app-title" content="File Browser" />
+    <meta name="apple-mobile-web-app-title" content="File Browser Next" />
 
     <!-- Add to home screen for Android and modern mobile browsers -->
     <link
@@ -39,7 +39,7 @@
     />
     <meta
       name="theme-color"
-      content="[{[ if .Color -]}][{[ .Color ]}][{[ else ]}]#2979ff[{[ end ]}]"
+      content="[{[ if .Color -]}][{[ .Color ]}][{[ else ]}]#6366f1[{[ end ]}]"
     />
 
     <!-- Inject Some Variables and generate the manifest json -->
@@ -51,8 +51,8 @@
         return `${window.FileBrowser.StaticURL}/${url.replace(/^\/+/, "")}`;
       };
       var dynamicManifest = {
-        name: window.FileBrowser.Name || "File Browser",
-        short_name: window.FileBrowser.Name || "File Browser",
+        name: window.FileBrowser.Name || "File Browser Next",
+        short_name: window.FileBrowser.Name || "File Browser Next",
         icons: [
           {
             src:

@@ -115,7 +115,21 @@ export async function signup(username: string, password: string) {
   }
 }
 
-export function logout(reason?: string) {
+export async function logout(reason?: string) {
+  const token = localStorage.getItem("jwt");
+  if (token) {
+    try {
+      await fetch(`${baseURL}/api/logout`, {
+        method: "POST",
+        headers: {
+          "X-Auth": token,
+        },
+      });
+    } catch {
+      // ignore network errors on logout
+    }
+  }
+
   document.cookie = "auth=; Max-Age=0; Path=/; SameSite=Strict;";
 
   const authStore = useAuthStore();

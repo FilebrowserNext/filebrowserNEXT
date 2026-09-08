@@ -97,13 +97,13 @@
 
     <p class="credits">
       <span>
-        <span v-if="disableExternal">File Browser</span>
+        <span v-if="disableExternal">File Browser Next</span>
         <a
           v-else
           rel="noopener noreferrer"
           target="_blank"
           href="https://github.com/filebrowser/filebrowser"
-          >File Browser</a
+          >File Browser Next</a
         >
         <span> {{ " " }} {{ version }}</span>
       </span>

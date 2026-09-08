@@ -89,6 +89,12 @@ func (s *Storage) Gets(baseScope string, followExternalSymlinks bool) ([]*User, 
 
 // Update updates a user in the database.
 func (s *Storage) Update(user *User, fields ...string) error {
+	now := time.Now().Unix()
+	user.UpdatedAt = now
+	if len(fields) > 0 {
+		fields = append(fields, "UpdatedAt")
+	}
+
 	err := user.Clean("", false, fields...)
 	if err != nil {
 		return err
@@ -100,7 +106,7 @@ func (s *Storage) Update(user *User, fields ...string) error {
 	}
 
 	s.mux.Lock()
-	s.updated[user.ID] = time.Now().Unix()
+	s.updated[user.ID] = now
 	s.mux.Unlock()
 	return nil
 }
@@ -173,9 +179,16 @@ func (s *Storage) Delete(id interface{}) error {
 // LastUpdate gets the timestamp for the last update of an user.
 func (s *Storage) LastUpdate(id uint) int64 {
 	s.mux.RLock()
-	defer s.mux.RUnlock()
-	if val, ok := s.updated[id]; ok {
+	val, ok := s.updated[id]
+	s.mux.RUnlock()
+	if ok && val > 0 {
 		return val
+	}
+	if u, err := s.back.GetBy(id); err == nil && u != nil && u.UpdatedAt > 0 {
+		s.mux.Lock()
+		s.updated[id] = u.UpdatedAt
+		s.mux.Unlock()
+		return u.UpdatedAt
 	}
 	return 0
 }

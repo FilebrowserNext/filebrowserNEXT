@@ -1,17 +1,19 @@
 header {
   z-index: 1000;
   background: var(--surfacePrimary);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--divider);
-  box-shadow: 0 0 5px var(--borderPrimary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   position: fixed;
   top: 0;
   left: 0;
   height: 4em;
   width: 100%;
-  padding: 0;
+  padding: 0.5em 1em;
   display: flex;
-  padding: 0.5em 0.5em 0.5em 1em;
   align-items: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 header > * {
@@ -25,6 +27,7 @@ header title {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 1.2em;
+  font-weight: 600;
 }
 
 header .overlay {
@@ -44,6 +47,7 @@ header img {
 
 header img {
   height: 2.5em;
+  border-radius: var(--radius-sm, 8px);
 }
 
 header .action span {
@@ -83,18 +87,23 @@ header .menu-button {
 
 #search #input {
   background: var(--surfaceSecondary);
-  border-color: var(--surfacePrimary);
+  border: 1px solid var(--borderPrimary);
   display: flex;
   height: 100%;
-  padding: 0em 0.75em;
-  border-radius: 0.3em;
-  transition: 0.1s ease all;
+  padding: 0.2em 0.85em;
+  border-radius: var(--radius-full, 9999px);
+  transition: all 0.2s ease;
   align-items: center;
   z-index: 2;
 }
 
+#search #input:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
 #search #input input::placeholder {
-  color: var(--textSecondary);
+  color: var(--textPrimary);
 }
 
 #search.active #input {
