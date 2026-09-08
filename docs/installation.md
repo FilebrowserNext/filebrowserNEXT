@@ -90,23 +90,25 @@ Then run:
 
 ## Running as a Background Service
 
-### Method 1: Nohup (Quick background run)
+### Linux
 
-To run the binary in the background so it continues running after you close your terminal:
+#### Quick Background Run (Nohup)
+
+Run File Browser Next detached from your terminal:
 
 ```sh
 nohup filebrowser -r /path/to/your/files > filebrowser.log 2>&1 &
 ```
 
-To stop the background process:
+To stop it:
 
 ```sh
 pkill filebrowser
 ```
 
-### Method 2: Systemd Service (Production servers)
+#### Production Service (Systemd)
 
-Create and enable a systemd service so File Browser Next starts on system boot and restarts on failure:
+Create and enable a systemd service so File Browser Next starts automatically on boot:
 
 ```sh
 sudo tee /etc/systemd/system/filebrowser.service > /dev/null <<EOF
@@ -125,6 +127,99 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now filebrowser
+```
+
+To stop or view logs:
+
+```sh
+sudo systemctl status filebrowser
+sudo systemctl stop filebrowser
+```
+
+---
+
+### macOS
+
+#### Quick Background Run (Nohup)
+
+```sh
+nohup filebrowser -r /path/to/your/files > filebrowser.log 2>&1 &
+```
+
+To stop it:
+
+```sh
+pkill filebrowser
+```
+
+#### Launchd Agent (Auto-start on login)
+
+Create `~/Library/LaunchAgents/com.filebrowsernext.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.filebrowsernext</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/filebrowser</string>
+        <string>-r</string>
+        <string>/Users/your-username/files</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
+```
+
+Load the service:
+
+```sh
+launchctl load ~/Library/LaunchAgents/com.filebrowsernext.plist
+```
+
+To stop it:
+
+```sh
+launchctl unload ~/Library/LaunchAgents/com.filebrowsernext.plist
+```
+
+---
+
+### Windows
+
+#### Quick Background Run (PowerShell)
+
+Launch File Browser Next silently without an open command window:
+
+```powershell
+Start-Process filebrowser -ArgumentList "-r C:\path\to\your\files" -WindowStyle Hidden
+```
+
+To stop the background process:
+
+```powershell
+Stop-Process -Name filebrowser
+```
+
+#### Windows Task Scheduler (Auto-start on boot)
+
+Create a scheduled task to run File Browser Next automatically at logon:
+
+```powershell
+schtasks /create /tn "FileBrowserNext" /tr "filebrowser.exe -r C:\path\to\your\files" /sc onlogon /rl highest
+```
+
+To start or delete the task:
+
+```powershell
+schtasks /run /tn "FileBrowserNext"
+schtasks /delete /tn "FileBrowserNext" /f
 ```
 
 ## Docker

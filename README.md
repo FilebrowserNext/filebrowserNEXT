@@ -147,13 +147,14 @@ docker run -d \
 
 ### Running in the Background
 
-#### Quick Run (Nohup)
+#### Linux & macOS (Nohup)
 
 ```bash
 nohup filebrowser -r /path/to/your/files > filebrowser.log 2>&1 &
 ```
+Stop with: `pkill filebrowser`
 
-#### Production Service (Systemd)
+#### Linux Service (Systemd)
 
 ```bash
 sudo tee /etc/systemd/system/filebrowser.service > /dev/null <<EOF
@@ -172,6 +173,13 @@ EOF
 
 sudo systemctl daemon-reload && sudo systemctl enable --now filebrowser
 ```
+
+#### Windows (PowerShell)
+
+```powershell
+Start-Process filebrowser -ArgumentList "-r C:\path\to\your\files" -WindowStyle Hidden
+```
+Stop with: `Stop-Process -Name filebrowser`
 
 
 ### Building from Source
