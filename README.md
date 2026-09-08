@@ -71,17 +71,35 @@ File Browser Next features a complete visual redesign:
 
 ## Getting Started
 
-### Quick Start with Prebuilt Binary / Go
+### Quick Install (Linux & macOS)
+
+Run the automated install script:
 
 ```bash
-# Build the backend binary
-go build -o filebrowser .
-
-# Start the server with a quick setup
-./filebrowser -r /path/to/your/files
+curl -fsSL https://raw.githubusercontent.com/FilebrowserNext/get/main/get.sh | bash
 ```
 
-Access the interface in your browser at `http://127.0.0.1:8080` (default credentials: `admin` / `admin`).
+Once installed, start the server:
+
+```bash
+filebrowser -r /path/to/your/files
+```
+
+Access the web interface at `http://127.0.0.1:8080`.
+
+### Quick Install (Windows)
+
+Run PowerShell as Administrator:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/FilebrowserNext/get/main/get.ps1 | iex
+```
+
+Once installed, launch from any terminal:
+
+```powershell
+filebrowser -r C:\path\to\your\files
+```
 
 ### Running with Docker
 

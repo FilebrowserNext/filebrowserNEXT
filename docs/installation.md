@@ -2,15 +2,50 @@
 
 File Browser Next is a single binary and can be used as a standalone executable. It is also available as a [Docker](https://www.docker.com) image. Installation is straightforward on any platform.
 
-## Binary
+## Quick Install (Automated)
 
-Download the pre-compiled binary for your platform directly from the [releases page](https://github.com/FilebrowserNext/filebrowserNEXT/releases).
+The quickest and easiest way to install File Browser Next is to use our official installation script, which automatically detects your operating system and CPU architecture, downloads the latest binary, and installs it to your system PATH.
+
+### Linux & macOS
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/FilebrowserNext/get/main/get.sh | bash
+```
+
+Or using `wget`:
+
+```sh
+wget -qO- https://raw.githubusercontent.com/FilebrowserNext/get/main/get.sh | bash
+```
+
+Once installed, launch File Browser Next with:
+
+```sh
+filebrowser -r /path/to/your/files
+```
+
+### Windows (PowerShell)
+
+Run PowerShell as Administrator:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/FilebrowserNext/get/main/get.ps1 | iex
+```
+
+Once installed, launch File Browser Next in a new terminal:
+
+```powershell
+filebrowser -r C:\path\to\your\files
+```
+
+## Manual Binary Download
+
+If you prefer downloading and extracting the binary manually, pre-compiled archives are available on our [releases page](https://github.com/FilebrowserNext/filebrowserNEXT/releases).
 
 ### Linux (amd64)
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-amd64.tar.gz | tar xz
-mv filebrowser-linux-amd64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -19,7 +54,6 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-arm64.tar.gz | tar xz
-mv filebrowser-linux-arm64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -28,7 +62,6 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-arm64.tar.gz | tar xz
-mv filebrowser-darwin-arm64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -37,14 +70,13 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-amd64.tar.gz | tar xz
-mv filebrowser-darwin-amd64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
 
 ### Windows (amd64)
 
-Download the archive from the releases page and extract it:
+Download the archive and extract it:
 
 ```
 https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-windows-amd64.zip
@@ -56,7 +88,44 @@ Then run:
 .\filebrowser.exe -r C:\path\to\your\files
 ```
 
-File Browser Next is now up and running. Read the ["First Boot"](#first-boot) section for more information.
+## Running as a Background Service
+
+### Method 1: Nohup (Quick background run)
+
+To run the binary in the background so it continues running after you close your terminal:
+
+```sh
+nohup filebrowser -r /path/to/your/files > filebrowser.log 2>&1 &
+```
+
+To stop the background process:
+
+```sh
+pkill filebrowser
+```
+
+### Method 2: Systemd Service (Production servers)
+
+Create and enable a systemd service so File Browser Next starts on system boot and restarts on failure:
+
+```sh
+sudo tee /etc/systemd/system/filebrowser.service > /dev/null <<EOF
+[Unit]
+Description=File Browser Next
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/filebrowser -r /path/to/your/files
+Restart=on-failure
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now filebrowser
+```
 
 ## Docker
 
