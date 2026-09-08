@@ -13,7 +13,9 @@ site_dir: site
 
 theme:
   name: material
+  custom_dir: overrides
   language: en
+
   logo: static/logo.png
   favicon: static/favicon.png
   palette:
