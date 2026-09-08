@@ -10,9 +10,12 @@ File Browser allows you to enable user self-registration (signup). This can be e
 > a. Enable `createUserDir` so each user gets their own directory; or
 > b. If users are meant to share files, set the default scope to something other than the root.
 
-## Fail2ban
+## Brute Force Protection & Fail2ban
 
-File Browser does not natively support protection against brute force attacks. Therefore, we suggest using something like [fail2ban](https://github.com/fail2ban/fail2ban), which takes care of that by tracking the logs of your File Browser instance. For more information on how fail2ban works, please refer to their [wiki](https://github.com/fail2ban/fail2ban/wiki).
+File Browser Next includes **native brute-force rate limiting** out of the box: `POST /api/login` and protected public share requests automatically block clients after 10 failed attempts within a 5-minute window (`HTTP 429 Too Many Requests`), with reverse-proxy-aware client IP detection (Cloudflare, Caddy, Nginx).
+
+If you additionally require kernel-level IP dropping via `iptables` before requests reach the application, you can optionally configure [Fail2ban](https://github.com/fail2ban/fail2ban) to monitor File Browser Next's access logs.
+
 
 ### Filter Configuration
 

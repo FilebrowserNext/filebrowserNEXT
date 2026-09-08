@@ -83,6 +83,45 @@ go build -o filebrowser .
 
 Access the interface in your browser at `http://127.0.0.1:8080` (default credentials: `admin` / `admin`).
 
+### Running with Docker
+
+File Browser Next runs as an ultra-lightweight standalone container (approx. 26 MB).
+
+#### Docker Compose (Recommended)
+
+```yaml
+version: '3.8'
+
+services:
+  filebrowser:
+    image: filebrowser-next:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - /path/to/your/files:/srv
+      - /path/to/database:/database
+```
+
+Start the service:
+```bash
+docker compose up -d
+```
+
+#### Docker Run (Single Command)
+
+```bash
+docker run -d \
+  --name filebrowser \
+  --restart unless-stopped \
+  -p 8080:80 \
+  -v /path/to/your/files:/srv \
+  -v /path/to/database:/database \
+  filebrowser-next:latest
+```
+
+
 ### Building from Source
 
 **Requirements:**
