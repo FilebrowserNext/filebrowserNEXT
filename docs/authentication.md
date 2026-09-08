@@ -1,6 +1,6 @@
 # Authentication
 
-There are three possible authentication methods. Each one of them has its own capabilities and specification. Adding another authentication method is described in [Building File Browser](../CONTRIBUTING.md#authentication-provider).
+There are three possible authentication methods. Each one of them has its own capabilities and specification. Adding another authentication method is described in [Building File Browser](contributing.md#authentication-provider).
 
 ## JSON Auth (default)
 
