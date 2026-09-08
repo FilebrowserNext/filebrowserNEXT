@@ -109,7 +109,7 @@ Once installed, launch from any terminal:
 filebrowser -r C:\path\to\your\files
 ```
 
-### Homebrew (macOS & Linux)
+### Homebrew (macOS)
 
 ```bash
 brew install FilebrowserNext/tap/filebrowser

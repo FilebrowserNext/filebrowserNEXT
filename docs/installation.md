@@ -38,7 +38,7 @@ Once installed, launch File Browser Next in a new terminal:
 filebrowser -r C:\path\to\your\files
 ```
 
-### Homebrew (macOS & Linux)
+### Homebrew (macOS)
 
 Install directly with one command:
 
