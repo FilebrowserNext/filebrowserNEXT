@@ -1,34 +1,58 @@
 # Installation
 
-File Browser is a single binary and can be used as standalone executable. However, it is also available as a [Docker](https://www.docker.com) image. The installation and first time setup is quite straightforward independently of which system you use.
+File Browser Next is a single binary and can be used as a standalone executable. It is also available as a [Docker](https://www.docker.com) image. Installation is straightforward on any platform.
 
 ## Binary
 
-The quickest and easiest way to install File Browser is to use a package manager, or our download script, which automatically fetches the latest version of File Browser for your platform. Alternatively, you can manually download the binary from the [releases page](https://github.com/filebrowser/filebrowser/releases).
+Download the pre-compiled binary for your platform directly from the [releases page](https://github.com/FilebrowserNext/filebrowserNEXT/releases).
 
-### Brew
-
-```sh
-brew tap filebrowser/tap
-brew install filebrowser
-filebrowser -r /path/to/your/files
-```
-
-### Unix
+### Linux (amd64)
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
-filebrowser -r /path/to/your/files
+curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-amd64.tar.gz | tar xz
+chmod +x filebrowser
+./filebrowser -r /path/to/your/files
 ```
 
-### Windows
+### Linux (arm64 / Raspberry Pi)
 
 ```sh
-iwr -useb https://raw.githubusercontent.com/filebrowser/get/master/get.ps1 | iex
-filebrowser -r /path/to/your/files
+curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-arm64.tar.gz | tar xz
+chmod +x filebrowser
+./filebrowser -r /path/to/your/files
 ```
 
-File Browser is now up and running. Read the ["First Boot"](#first-boot) section for more information.
+### macOS (Apple Silicon)
+
+```sh
+curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-arm64.tar.gz | tar xz
+chmod +x filebrowser
+./filebrowser -r /path/to/your/files
+```
+
+### macOS (Intel)
+
+```sh
+curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-amd64.tar.gz | tar xz
+chmod +x filebrowser
+./filebrowser -r /path/to/your/files
+```
+
+### Windows (amd64)
+
+Download the archive from the releases page and extract it:
+
+```
+https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-windows-amd64.zip
+```
+
+Then run:
+
+```powershell
+.\filebrowser.exe -r C:\path\to\your\files
+```
+
+File Browser Next is now up and running. Read the ["First Boot"](#first-boot) section for more information.
 
 ## Docker
 
