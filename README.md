@@ -90,8 +90,6 @@ File Browser Next runs as an ultra-lightweight standalone container (approx. 26 
 #### Docker Compose (Recommended)
 
 ```yaml
-version: '3.8'
-
 services:
   filebrowser:
     image: ghcr.io/filebrowsernext/filebrowsernext:latest

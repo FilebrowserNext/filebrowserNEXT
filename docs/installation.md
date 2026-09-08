@@ -65,8 +65,6 @@ Docker Compose is the cleanest way to run and manage File Browser Next on a serv
 Create a `docker-compose.yml` file:
 
 ```yaml
-version: '3.8'
-
 services:
   filebrowser:
     image: ghcr.io/filebrowsernext/filebrowsernext:latest
