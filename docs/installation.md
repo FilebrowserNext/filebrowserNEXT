@@ -10,6 +10,7 @@ Download the pre-compiled binary for your platform directly from the [releases p
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-amd64.tar.gz | tar xz
+mv filebrowser-linux-amd64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -18,6 +19,7 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-linux-arm64.tar.gz | tar xz
+mv filebrowser-linux-arm64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -26,6 +28,7 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-arm64.tar.gz | tar xz
+mv filebrowser-darwin-arm64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
@@ -34,6 +37,7 @@ chmod +x filebrowser
 
 ```sh
 curl -L https://github.com/FilebrowserNext/filebrowserNEXT/releases/latest/download/filebrowser-darwin-amd64.tar.gz | tar xz
+mv filebrowser-darwin-amd64 filebrowser
 chmod +x filebrowser
 ./filebrowser -r /path/to/your/files
 ```
