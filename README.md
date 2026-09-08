@@ -43,7 +43,19 @@ File Browser Next specifically resolves the critical security architecture issue
 - **Case-Insensitive Login**: Username lookup at login is now case-insensitive. Typing `Admin` or `ADMIN` correctly authenticates as `admin`, matching the behavior users expect.
 - **No Spurious Logouts on Preference Save**: In the original codebase, saving any user preference (language, view mode, etc.) updated `UpdatedAt` and silently invalidated the active session, forcing a re-login. This is now fixed.
 
+### 4. Brute Force Protection (New)
+- **Login Rate Limiting**: `POST /api/login` is limited to 10 attempts per IP per 5-minute window. Exceeding the limit returns `HTTP 429 Too Many Requests`. Legitimate users connecting normally are never affected.
+- **Share Password Rate Limiting**: Password attempts on protected public shares are limited to 10 per IP per share per 5-minute window, preventing offline-style brute force of share passwords.
+
+### 5. Hardened HTTP Security Headers (New)
+All API and page responses now include the following headers in addition to `Content-Security-Policy`:
+- `X-Frame-Options: DENY` — prevents clickjacking by blocking the app from being embedded in an `<iframe>` on a third-party page.
+- `X-Content-Type-Options: nosniff` — prevents browsers from MIME-sniffing responses away from the declared content type.
+- `Referrer-Policy: strict-origin-when-cross-origin` — limits referrer information sent to third-party sites.
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()` — explicitly disables browser APIs that a file manager has no need for.
+
 ---
+
 
 ## Modern UI & Experience
 

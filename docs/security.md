@@ -15,6 +15,8 @@ File Browser Next incorporates native defenses against the vulnerabilities ident
 - **Server-Side Token Revocation**: Dedicated token revocation backend ensuring immediate invalidation on logout, password changes, and renewal replay attacks.
 - **Targeted Session Invalidation**: Only security-sensitive updates (password, permissions, username, scope, rules) invalidate active sessions. Preference-only updates (language, theme, view mode) no longer silently log users out.
 - **Case-Insensitive Authentication**: Username lookup at login tolerates any casing, preventing frustrating 403 errors from trivial capitalization differences.
+- **Brute Force Protection**: `POST /api/login` and share password endpoints are rate-limited to 10 attempts per IP per 5-minute window, returning `HTTP 429` when exceeded. Normal users are never affected.
+- **Hardened HTTP Headers**: Every response includes `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Permissions-Policy` disabling camera, microphone, and geolocation.
 - **Command Confinement & Sanitization**: Strict filesystem directory confinement and detection/filtering of dangerous shell metacharacters.
 
 ## Reporting a Vulnerability

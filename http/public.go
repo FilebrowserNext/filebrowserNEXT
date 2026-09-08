@@ -146,6 +146,12 @@ func authenticateShareRequest(r *http.Request, l *share.Link) (int, error) {
 		return 0, nil
 	}
 
+	// Rate-limit password attempts per IP+hash to prevent brute force.
+	key := clientIP(r) + ":" + l.Hash
+	if !shareLimiter.allow(key) {
+		return http.StatusTooManyRequests, nil
+	}
+
 	password := r.Header.Get("X-SHARE-PASSWORD")
 	password, err := url.QueryUnescape(password)
 	if err != nil {
@@ -163,6 +169,7 @@ func authenticateShareRequest(r *http.Request, l *share.Link) (int, error) {
 
 	return 0, nil
 }
+
 
 func healthHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)

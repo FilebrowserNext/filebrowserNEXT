@@ -173,6 +173,10 @@ func loginHandler(tokenExpireTime time.Duration) handleFunc {
 			r.Body = http.MaxBytesReader(w, r.Body, maxAuthBodySize)
 		}
 
+		if !loginLimiter.allow(clientIP(r)) {
+			return http.StatusTooManyRequests, nil
+		}
+
 		auther, err := d.store.Auth.Get(d.settings.AuthMethod)
 		if err != nil {
 			return http.StatusInternalServerError, err
@@ -189,6 +193,7 @@ func loginHandler(tokenExpireTime time.Duration) handleFunc {
 		return printToken(w, r, d, user, tokenExpireTime)
 	}
 }
+
 
 type signupBody struct {
 	Username string `json:"username"`
