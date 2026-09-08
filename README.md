@@ -94,7 +94,7 @@ version: '3.8'
 
 services:
   filebrowser:
-    image: filebrowser-next:latest
+    image: ghcr.io/filebrowsernext/filebrowsernext:latest
     container_name: filebrowser
     restart: unless-stopped
     ports:
@@ -118,7 +118,8 @@ docker run -d \
   -p 8080:80 \
   -v /path/to/your/files:/srv \
   -v /path/to/database:/database \
-  filebrowser-next:latest
+  ghcr.io/filebrowsernext/filebrowsernext:latest
+
 ```
 
 

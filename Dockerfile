@@ -10,6 +10,7 @@ RUN apk update && \
 FROM busybox:1.37.0-musl
 
 # Define non-root user UID and GID
+ARG TARGETARCH=amd64
 ENV UID=1000
 ENV GID=1000
 
@@ -17,8 +18,14 @@ ENV GID=1000
 RUN addgroup -g $GID user && \
     adduser -D -u $UID -G user user
 
-# Copy binary, scripts, and configurations into image with proper ownership
-COPY --chown=user:user filebrowser /bin/filebrowser
+# Copy binary with multi-arch fallback
+COPY --chown=user:user filebrowser* /tmp/
+RUN if [ -f "/tmp/filebrowser-${TARGETARCH}" ]; then \
+        mv "/tmp/filebrowser-${TARGETARCH}" /bin/filebrowser; \
+    elif [ -f "/tmp/filebrowser" ]; then \
+        mv "/tmp/filebrowser" /bin/filebrowser; \
+    fi && rm -rf /tmp/filebrowser* && chmod +x /bin/filebrowser
+
 COPY --chown=user:user docker/common/ /
 COPY --chown=user:user docker/alpine/ /
 COPY --chown=user:user --from=fetcher /sbin/tini-static /bin/tini
