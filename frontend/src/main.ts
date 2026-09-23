@@ -1,4 +1,5 @@
 import { disableExternal } from "@/utils/constants";
+import { StatusError } from "@/api/utils";
 import { createApp } from "vue";
 import VueNumberInput from "@chenfengyuan/vue-number-input";
 import VueLazyload from "vue-lazyload";
@@ -85,12 +86,26 @@ app.provide("$showSuccess", (message: string) => {
 
 app.provide("$showError", (error: Error | string, displayReport = true) => {
   const $toast = useToast();
+  let message = (error as Error).message || (error as string);
+  let isReport = !disableExternal && displayReport;
+
+  const isTooManyRequests =
+    (error instanceof StatusError && error.status === 429) ||
+    (typeof message === "string" &&
+      (message.includes("429") ||
+        message.toLowerCase().includes("too many requests")));
+
+  if (isTooManyRequests) {
+    message = i18n.global.t("errors.tooManyRequests");
+    isReport = false;
+  }
+
   $toast.error(
     {
       component: CustomToast,
       props: {
-        message: (error as Error).message || error,
-        isReport: !disableExternal && displayReport,
+        message: message,
+        isReport: isReport,
         // TODO: could you add this to the component itself?
         reportText: i18n.global.t("buttons.reportIssue"),
       },

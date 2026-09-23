@@ -34,6 +34,10 @@ const errors: {
     icon: "gps_off",
     message: "errors.notFound",
   },
+  429: {
+    icon: "timer",
+    message: "errors.tooManyRequests",
+  },
   500: {
     icon: "error_outline",
     message: "errors.internal",

@@ -69,6 +69,7 @@
             :placeholder="t('settings.newPassword')"
             v-model="password"
             name="password"
+            required
           />
           <input
             :class="passwordClass"
@@ -76,15 +77,17 @@
             :placeholder="t('settings.newPasswordConfirm')"
             v-model="passwordConf"
             name="passwordConf"
+            required
           />
           <input
             v-if="isCurrentPasswordRequired"
-            :class="passwordClass"
+            class="input input--block"
             type="password"
             :placeholder="t('settings.currentPassword')"
             v-model="currentPassword"
             name="current_password"
             autocomplete="current-password"
+            required
           />
         </div>
 
@@ -105,9 +108,10 @@
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { users as api } from "@/api";
+import * as auth from "@/utils/auth";
 import AceEditorTheme from "@/components/settings/AceEditorTheme.vue";
 import Languages from "@/components/settings/Languages.vue";
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { authMethod, noAuth } from "@/utils/constants";
 
@@ -121,7 +125,7 @@ const $showError = inject<IToastError>("$showError")!;
 const password = ref<string>("");
 const passwordConf = ref<string>("");
 const currentPassword = ref<string>("");
-const isCurrentPasswordRequired = ref<boolean>(false);
+const isCurrentPasswordRequired = ref<boolean>(authMethod === "json");
 const hideDotfiles = ref<boolean>(false);
 const singleClick = ref<boolean>(false);
 const redirectAfterCopyMove = ref<boolean>(false);
@@ -143,30 +147,44 @@ const passwordClass = computed(() => {
   return `${baseClass} input--red`;
 });
 
-onMounted(async () => {
-  layoutStore.loading = true;
-  if (authStore.user === null) return false;
+const syncUserData = () => {
+  if (authStore.user === null) return;
   locale.value = authStore.user.locale;
   hideDotfiles.value = authStore.user.hideDotfiles;
   singleClick.value = authStore.user.singleClick;
   redirectAfterCopyMove.value = authStore.user.redirectAfterCopyMove;
   dateFormat.value = authStore.user.dateFormat;
   aceEditorTheme.value = authStore.user.aceEditorTheme;
-  layoutStore.loading = false;
-  isCurrentPasswordRequired.value = authMethod == "json";
+};
 
-  return true;
+watch(() => authStore.user, syncUserData, { immediate: true });
+
+onMounted(async () => {
+  layoutStore.loading = true;
+  isCurrentPasswordRequired.value = authMethod === "json";
+  syncUserData();
+  layoutStore.loading = false;
 });
 
 const updatePassword = async (event: Event) => {
   event.preventDefault();
 
-  if (
-    password.value !== passwordConf.value ||
-    password.value === "" ||
-    currentPassword.value === "" ||
-    authStore.user === null
-  ) {
+  if (!password.value) {
+    $showError(t("errors.emptyPassword"));
+    return;
+  }
+
+  if (password.value !== passwordConf.value) {
+    $showError(t("login.passwordsDontMatch"));
+    return;
+  }
+
+  if (isCurrentPasswordRequired.value && !currentPassword.value) {
+    $showError(t("errors.enterCurrentPassword"));
+    return;
+  }
+
+  if (authStore.user === null) {
     return;
   }
 
@@ -176,13 +194,38 @@ const updatePassword = async (event: Event) => {
       id: authStore.user.id,
       password: password.value,
     };
-    await api.update(data, ["password"], currentPassword.value);
-    authStore.updateUser(data);
-    $showSuccess(t("settings.passwordUpdated"));
+    await api.update(
+      data,
+      ["password"],
+      isCurrentPasswordRequired.value ? currentPassword.value : ""
+    );
+
+    // Re-authenticate with new password so the session isn't invalidated
+    try {
+      await auth.login(authStore.user.username, password.value, "");
+      authStore.updateUser(data);
+      $showSuccess(t("settings.passwordUpdated"));
+    } catch {
+      $showSuccess(t("settings.passwordUpdated"));
+      auth.logout();
+    }
   } catch (e: any) {
-    $showError(e);
+    if (e instanceof Error) {
+      const match = e.message.match(/minimum length is (\d+)/);
+      if (match) {
+        $showError(t("login.passwordTooShort", { min: match[1] }));
+      } else if (e.message.includes("current password is incorrect")) {
+        $showError(t("errors.currentPasswordIncorrect"));
+      } else {
+        $showError(e);
+      }
+    } else {
+      $showError(e);
+    }
   } finally {
-    password.value = passwordConf.value = "";
+    password.value = "";
+    passwordConf.value = "";
+    currentPassword.value = "";
   }
 };
 const updateSettings = async (event: Event) => {

@@ -119,6 +119,8 @@ const submit = async (event: Event) => {
         } else {
           error.value = e.message;
         }
+      } else if (e.status === 429) {
+        error.value = t("errors.tooManyRequests");
       } else {
         $showError(e);
       }

@@ -68,7 +68,11 @@
     "forbidden": "Vous n'avez pas la permission d'accéder à cela.",
     "internal": "Aïe ! Quelque chose s'est mal passé.",
     "notFound": "Impossible d'accéder à cet emplacement.",
-    "connection": "Le serveur est injoignable."
+    "connection": "Le serveur est injoignable.",
+    "tooManyRequests": "Trop de requêtes. Veuillez réessayer plus tard.",
+    "emptyPassword": "Le mot de passe ne peut pas être vide.",
+    "enterCurrentPassword": "Veuillez entrer votre mot de passe actuel.",
+    "currentPasswordIncorrect": "Le mot de passe actuel est incorrect."
   },
   "files": {
     "body": "Corps",

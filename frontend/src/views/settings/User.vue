@@ -59,7 +59,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { StatusError } from "@/api/utils";
 import { authMethod } from "@/utils/constants";
-import { logout } from "@/utils/auth";
+import * as auth from "@/utils/auth";
 
 const error = ref<StatusError>();
 const originalUser = ref<IUser>();
@@ -146,7 +146,7 @@ const deleteUser = async (currentPassword: string) => {
   try {
     await api.remove(user.value.id, currentPassword);
     if (user.value.id == authStore.user?.id) {
-      logout();
+      auth.logout();
     } else {
       router.push({ path: "/settings/users" });
     }
@@ -199,13 +199,31 @@ const send = async (currentPassword: string) => {
       await api.update(user.value, ["all"], currentPassword);
 
       if (user.value.id === authStore.user?.id) {
+        if (user.value.password) {
+          try {
+            await auth.login(user.value.username, user.value.password, "");
+          } catch {
+            auth.logout();
+          }
+        }
         authStore.updateUser(user.value);
       }
 
       $showSuccess(t("settings.userUpdated"));
     }
   } catch (e: any) {
-    $showError(e);
+    if (e instanceof Error) {
+      const match = e.message.match(/minimum length is (\d+)/);
+      if (match) {
+        $showError(t("login.passwordTooShort", { min: match[1] }));
+      } else if (e.message.includes("current password is incorrect")) {
+        $showError(t("errors.currentPasswordIncorrect"));
+      } else {
+        $showError(e);
+      }
+    } else {
+      $showError(e);
+    }
   }
 };
 </script>

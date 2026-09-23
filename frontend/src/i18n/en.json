@@ -68,7 +68,11 @@
     "forbidden": "You don't have permissions to access this.",
     "internal": "Something really went wrong.",
     "notFound": "This location can't be reached.",
-    "connection": "The server can't be reached."
+    "connection": "The server can't be reached.",
+    "tooManyRequests": "Too many requests. Please try again later.",
+    "emptyPassword": "Password cannot be empty.",
+    "enterCurrentPassword": "Please enter your current password.",
+    "currentPasswordIncorrect": "The current password is incorrect."
   },
   "files": {
     "body": "Body",

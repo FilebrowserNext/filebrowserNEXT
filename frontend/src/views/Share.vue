@@ -39,9 +39,12 @@
       </h2>
     </div>
     <div v-else-if="error">
-      <div v-if="error.status === 401">
+      <div v-if="error.status === 401 || error.status === 429">
         <div class="card floating" id="password" style="z-index: 9999999">
-          <div v-if="attemptedPasswordLogin" class="share__wrong__password">
+          <div v-if="error.status === 429" class="share__wrong__password">
+            {{ t("errors.tooManyRequests") }}
+          </div>
+          <div v-else-if="attemptedPasswordLogin" class="share__wrong__password">
             {{ t("login.wrongCredentials") }}
           </div>
           <div class="card-title">
