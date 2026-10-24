@@ -38,7 +38,8 @@ COPY --from=fetcher /etc/ssl /etc/ssl
 # Create data directories, set ownership, and ensure healthcheck script is executable
 RUN mkdir -p /config /database /srv && \
     chown -R user:user /config /database /srv \
-    && chmod +x /healthcheck.sh
+    && chmod +x /healthcheck.sh \
+    && chmod +x /JSON.sh
 
 # Define healthcheck script
 HEALTHCHECK --start-period=2s --interval=5s --timeout=3s CMD /healthcheck.sh
