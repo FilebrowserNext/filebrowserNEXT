@@ -228,6 +228,33 @@ go build -o filebrowser .
 
 ---
 
+## Contributors
+
+Thank you to everyone who contributes to File Browser Next.
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="140">
+        <a href="https://github.com/AnARCHIS12">
+          <img src="docs/static/contributors/anarchis12.png" width="80" height="80" alt="CALYPS" /><br />
+          <sub><b>CALYPS</b></sub>
+        </a><br />
+        <sub>Maintainer</sub>
+      </td>
+      <td align="center" valign="top" width="140">
+        <a href="https://github.com/towa48">
+          <img src="docs/static/contributors/towa48.png" width="80" height="80" alt="Anton Prilepskiy" /><br />
+          <sub><b>Anton Prilepskiy</b></sub>
+        </a><br />
+        <sub>ARM64 Docker Fix</sub>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
 ## License
 
 [Apache License 2.0](LICENSE) © File Browser Next Contributors & File Browser Authors.
