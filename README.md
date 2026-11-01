@@ -119,6 +119,12 @@ brew install FilebrowserNext/tap/filebrowser
 
 File Browser Next runs as an ultra-lightweight standalone container (approx. 26 MB).
 
+#### Set permission for the vault
+
+```bash
+$ sudo chown 1000:1000 /path/to/your/files /path/to/database
+```
+
 #### Docker Compose (Recommended)
 
 ```yaml
@@ -150,6 +156,13 @@ docker run -d \
   -v /path/to/database:/database \
   ghcr.io/filebrowsernext/filebrowsernext:latest
 
+```
+
+#### Administrator password
+
+The administrator password will be set automatically.
+```bash
+docker logs filebrowser 2>&1 | grep password
 ```
 
 ### Running in the Background
