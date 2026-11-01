@@ -117,7 +117,7 @@ brew install FilebrowserNext/tap/filebrowser
 
 ### Running with Docker
 
-File Browser Next runs as an ultra-lightweight standalone container (approx. 26 MB).
+File Browser Next runs as an ultra-lightweight standalone container (approx. 26 MB) with native multi-architecture support (`linux/amd64` and `linux/arm64` for Raspberry Pi, Apple Silicon, and ARM servers). Docker automatically pulls the correct image for your host architecture.
 
 #### Set permission for the vault
 

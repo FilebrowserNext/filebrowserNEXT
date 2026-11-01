@@ -239,7 +239,7 @@ schtasks /delete /tn "FileBrowserNext" /f
 
 ## Docker
 
-File Browser Next is designed to run seamlessly in Docker as a single, ultra-lightweight container (approx. 26 MB).
+File Browser Next is designed to run seamlessly in Docker as a single, ultra-lightweight container (approx. 26 MB) with native multi-architecture support (`linux/amd64` and `linux/arm64` for Raspberry Pi, Apple Silicon, and ARM servers). Docker automatically detects and pulls the matching architecture.
 
 ### Method 1: Docker Compose (Recommended)
 
