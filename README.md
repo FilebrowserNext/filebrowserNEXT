@@ -63,6 +63,10 @@ All API and page responses now include the following headers in addition to `Con
 - `Referrer-Policy: strict-origin-when-cross-origin` — limits referrer information sent to third-party sites.
 - `Permissions-Policy: camera=(), microphone=(), geolocation=()` — explicitly disables browser APIs that a file manager has no need for.
 
+### 6. Multi-Factor & Passwordless Authentication (New in v3.0.1)
+- **Time-Based One-Time Passwords (TOTP)**: Built-in 2FA support compatible with Google Authenticator, Bitwarden, Aegis, and 1Password (RFC 6238). TOTP secrets are encrypted at rest with authenticated AES-GCM.
+- **WebAuthn / FIDO2 Passkeys**: Phishing-resistant, passwordless authentication using biometric sensors (Touch ID, Face ID, Windows Hello) and hardware security keys (YubiKey). Enforces explicit relying-party origin bindings and user verification.
+
 ---
 
 
