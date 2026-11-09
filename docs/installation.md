@@ -38,7 +38,7 @@ Once installed, launch File Browser Next in a new terminal:
 filebrowser -r C:\path\to\your\files
 ```
 
-### Homebrew (macOS)
+### Homebrew (macOS & Linux)
 
 Install directly with one command:
 
@@ -46,11 +46,12 @@ Install directly with one command:
 brew install FilebrowserNext/tap/filebrowser
 ```
 
-Or tap the repository first:
+Or tap and trust the repository first:
 
 ```sh
 brew tap FilebrowserNext/tap
-brew install filebrowser
+brew trust filebrowsernext/tap
+brew install filebrowsernext/tap/filebrowser
 ```
 
 ## Manual Binary Download

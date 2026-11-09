@@ -113,11 +113,13 @@ Once installed, launch from any terminal:
 filebrowser -r C:\path\to\your\files
 ```
 
-### Homebrew (macOS)
+### Homebrew (macOS & Linux)
 
 ```bash
 brew install FilebrowserNext/tap/filebrowser
 ```
+
+*(If using `brew tap`, run `brew trust filebrowsernext/tap` first).*
 
 ### Running with Docker
 
