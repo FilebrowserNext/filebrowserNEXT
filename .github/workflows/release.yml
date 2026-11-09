@@ -118,3 +118,15 @@ jobs:
             gh release edit "${TAG}" --notes-file /tmp/new_body.md
             echo "Release notes updated."
           fi
+
+      - name: Trigger Homebrew tap update
+        if: env.TAP_TOKEN != ''
+        env:
+          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          echo "Triggering repository dispatch on FilebrowserNext/homebrew-tap..."
+          curl -s -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${TAP_TOKEN}" \
+            https://api.github.com/repos/FilebrowserNext/homebrew-tap/dispatches \
+            -d '{"event_type": "new-release"}'
