@@ -112,24 +112,7 @@ jobs:
           echo "Ensuring Downloads & Checksums table exists in release notes..."
           BODY=$(gh release view "${TAG}" --json body -q .body 2>/dev/null || true)
           if [[ -n "$BODY" ]] && ! echo "$BODY" | grep -q "Downloads & Checksums"; then
-            cat << 'EOF' > /tmp/append_notes.md
-
----
-
-### Downloads & Checksums
-
-| OS / Architecture | Archive |
-|---|---|
-| Linux x86_64 | `filebrowser-linux-amd64.tar.gz` |
-| Linux ARM64 / Raspberry Pi | `filebrowser-linux-arm64.tar.gz` |
-| macOS Intel | `filebrowser-darwin-amd64.tar.gz` |
-| macOS Apple Silicon (M1/M2/M3/M4) | `filebrowser-darwin-arm64.tar.gz` |
-| Windows 64-bit | `filebrowser-windows-amd64.zip` |
-
-Verify archive integrity using `checksums.txt` (SHA256).
-
-Access the web UI at `http://127.0.0.1:8080` (or `http://<your-server-ip>:8080`) — default credentials: `admin` / `admin`.
-EOF
+            printf '\n---\n\n### Downloads & Checksums\n\n| OS / Architecture | Archive |\n|---|---|\n| Linux x86_64 | `filebrowser-linux-amd64.tar.gz` |\n| Linux ARM64 / Raspberry Pi | `filebrowser-linux-arm64.tar.gz` |\n| macOS Intel | `filebrowser-darwin-amd64.tar.gz` |\n| macOS Apple Silicon (M1/M2/M3/M4) | `filebrowser-darwin-arm64.tar.gz` |\n| Windows 64-bit | `filebrowser-windows-amd64.zip` |\n\nVerify archive integrity using `checksums.txt` (SHA256).\n\nAccess the web UI at `http://127.0.0.1:8080` (or `http://<your-server-ip>:8080`) — default credentials: `admin` / `admin`.\n' > /tmp/append_notes.md
             NEW_BODY="${BODY}$(cat /tmp/append_notes.md)"
             echo "$NEW_BODY" > /tmp/new_body.md
             gh release edit "${TAG}" --notes-file /tmp/new_body.md
