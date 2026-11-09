@@ -24,6 +24,29 @@ tasks:
       - task: build:frontend
       - task: build:backend
 
+  package:dist:
+    desc: Build and package multi-arch release archives
+    cmds:
+      - task: build:frontend
+      - rm -rf dist-bin dist
+      - mkdir -p dist-bin/linux-amd64 dist-bin/linux-arm64 dist-bin/darwin-amd64 dist-bin/darwin-arm64 dist-bin/windows-amd64 dist
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-s -w -X "github.com/filebrowser/filebrowser/v2/version.Version={{.VERSION}}" -X "github.com/filebrowser/filebrowser/v2/version.CommitSHA={{.GIT_COMMIT}}"' -o dist-bin/linux-amd64/filebrowser .
+      - CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-s -w -X "github.com/filebrowser/filebrowser/v2/version.Version={{.VERSION}}" -X "github.com/filebrowser/filebrowser/v2/version.CommitSHA={{.GIT_COMMIT}}"' -o dist-bin/linux-arm64/filebrowser .
+      - CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-s -w -X "github.com/filebrowser/filebrowser/v2/version.Version={{.VERSION}}" -X "github.com/filebrowser/filebrowser/v2/version.CommitSHA={{.GIT_COMMIT}}"' -o dist-bin/darwin-amd64/filebrowser .
+      - CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags='-s -w -X "github.com/filebrowser/filebrowser/v2/version.Version={{.VERSION}}" -X "github.com/filebrowser/filebrowser/v2/version.CommitSHA={{.GIT_COMMIT}}"' -o dist-bin/darwin-arm64/filebrowser .
+      - CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags='-s -w -X "github.com/filebrowser/filebrowser/v2/version.Version={{.VERSION}}" -X "github.com/filebrowser/filebrowser/v2/version.CommitSHA={{.GIT_COMMIT}}"' -o dist-bin/windows-amd64/filebrowser.exe .
+      - tar -czf dist/filebrowser-linux-amd64.tar.gz -C dist-bin/linux-amd64 filebrowser
+      - tar -czf dist/filebrowser-linux-arm64.tar.gz -C dist-bin/linux-arm64 filebrowser
+      - tar -czf dist/filebrowser-darwin-amd64.tar.gz -C dist-bin/darwin-amd64 filebrowser
+      - tar -czf dist/filebrowser-darwin-arm64.tar.gz -C dist-bin/darwin-arm64 filebrowser
+      - cd dist-bin/windows-amd64 && zip ../../dist/filebrowser-windows-amd64.zip filebrowser.exe
+      - cd dist && sha256sum filebrowser-linux-amd64.tar.gz filebrowser-linux-arm64.tar.gz filebrowser-darwin-amd64.tar.gz filebrowser-darwin-arm64.tar.gz filebrowser-windows-amd64.zip > checksums.txt
+    vars:
+      GIT_COMMIT:
+        sh: git log -n 1 --format=%h
+      VERSION:
+        sh: git describe --tags --abbrev=0 --match=v* | cut -c 2-
+
   release:make:
     internal: true
     prompt: Do you wish to proceed?

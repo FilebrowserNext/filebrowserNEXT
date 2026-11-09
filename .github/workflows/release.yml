@@ -1,0 +1,137 @@
+name: Build and Publish Release Binaries
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v3.0.1-next)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  release-binaries:
+    name: Build and Attach Release Assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: "frontend/package.json"
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+          cache-dependency-path: "frontend/pnpm-lock.yaml"
+
+      - name: Build frontend
+        run: |
+          pnpm --dir frontend install --frozen-lockfile
+          pnpm --dir frontend build
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.x"
+
+      - name: Determine Version and Commit
+        id: vars
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            TAG="${{ github.event.release.tag_name }}"
+          elif [[ -n "${{ github.event.inputs.tag }}" ]]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          VERSION="${TAG#v}"
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "COMMIT_SHA=${COMMIT_SHA}" >> $GITHUB_ENV
+          echo "Target tag: ${TAG}"
+          echo "Resolved version: ${VERSION}"
+          echo "Commit SHA: ${COMMIT_SHA}"
+
+      - name: Compile multi-platform binaries
+        run: |
+          mkdir -p dist-bin/linux-amd64 dist-bin/linux-arm64 dist-bin/darwin-amd64 dist-bin/darwin-arm64 dist-bin/windows-amd64
+          LDFLAGS="-s -w -X 'github.com/filebrowser/filebrowser/v2/version.Version=${VERSION}' -X 'github.com/filebrowser/filebrowser/v2/version.CommitSHA=${COMMIT_SHA}'"
+
+          echo "Compiling linux/amd64..."
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="${LDFLAGS}" -o dist-bin/linux-amd64/filebrowser .
+
+          echo "Compiling linux/arm64..."
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="${LDFLAGS}" -o dist-bin/linux-arm64/filebrowser .
+
+          echo "Compiling darwin/amd64..."
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="${LDFLAGS}" -o dist-bin/darwin-amd64/filebrowser .
+
+          echo "Compiling darwin/arm64..."
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="${LDFLAGS}" -o dist-bin/darwin-arm64/filebrowser .
+
+          echo "Compiling windows/amd64..."
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="${LDFLAGS}" -o dist-bin/windows-amd64/filebrowser.exe .
+
+      - name: Package release archives and checksums
+        run: |
+          mkdir -p dist
+          tar -czf dist/filebrowser-linux-amd64.tar.gz -C dist-bin/linux-amd64 filebrowser
+          tar -czf dist/filebrowser-linux-arm64.tar.gz -C dist-bin/linux-arm64 filebrowser
+          tar -czf dist/filebrowser-darwin-amd64.tar.gz -C dist-bin/darwin-amd64 filebrowser
+          tar -czf dist/filebrowser-darwin-arm64.tar.gz -C dist-bin/darwin-arm64 filebrowser
+          (cd dist-bin/windows-amd64 && zip ../../dist/filebrowser-windows-amd64.zip filebrowser.exe)
+
+          (cd dist && sha256sum filebrowser-linux-amd64.tar.gz filebrowser-linux-arm64.tar.gz filebrowser-darwin-amd64.tar.gz filebrowser-darwin-arm64.tar.gz filebrowser-windows-amd64.zip > checksums.txt)
+          cat dist/checksums.txt
+
+      - name: Upload assets and update release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! gh release view "${TAG}" >/dev/null 2>&1; then
+            echo "Release ${TAG} does not exist yet, creating release..."
+            gh release create "${TAG}" dist/* --title "File Browser Next ${TAG}" --generate-notes
+          else
+            echo "Release ${TAG} exists, uploading assets..."
+            gh release upload "${TAG}" dist/* --clobber
+          fi
+
+          echo "Ensuring Downloads & Checksums table exists in release notes..."
+          BODY=$(gh release view "${TAG}" --json body -q .body 2>/dev/null || true)
+          if [[ -n "$BODY" ]] && ! echo "$BODY" | grep -q "Downloads & Checksums"; then
+            cat << 'EOF' > /tmp/append_notes.md
+
+---
+
+### Downloads & Checksums
+
+| OS / Architecture | Archive |
+|---|---|
+| Linux x86_64 | `filebrowser-linux-amd64.tar.gz` |
+| Linux ARM64 / Raspberry Pi | `filebrowser-linux-arm64.tar.gz` |
+| macOS Intel | `filebrowser-darwin-amd64.tar.gz` |
+| macOS Apple Silicon (M1/M2/M3/M4) | `filebrowser-darwin-arm64.tar.gz` |
+| Windows 64-bit | `filebrowser-windows-amd64.zip` |
+
+Verify archive integrity using `checksums.txt` (SHA256).
+
+Access the web UI at `http://127.0.0.1:8080` (or `http://<your-server-ip>:8080`) — default credentials: `admin` / `admin`.
+EOF
+            NEW_BODY="${BODY}$(cat /tmp/append_notes.md)"
+            echo "$NEW_BODY" > /tmp/new_body.md
+            gh release edit "${TAG}" --notes-file /tmp/new_body.md
+            echo "Release notes updated."
+          fi
