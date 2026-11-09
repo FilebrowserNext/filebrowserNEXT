@@ -49,7 +49,7 @@ jobs:
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/v}"
           else
-            VERSION="3.0.0-next"
+            VERSION="3.0.1-next"
           fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "Resolved version: ${VERSION}"

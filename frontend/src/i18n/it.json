@@ -66,7 +66,8 @@
     "forbidden": "Non hai i permessi per accedere a questo file.",
     "internal": "Qualcosa è andato veramente male.",
     "notFound": "Questo percorso non può essere raggiunto.",
-    "connection": "Il server non è raggiungibile"
+    "connection": "Il server non è raggiungibile",
+    "passkeyFailed": "Non è stato possibile completare l’autenticazione con passkey."
   },
   "files": {
     "body": "Contenuto",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Codice di autenticazione",
+    "verifyTotp": "Verifica il codice",
+    "usePasskey": "Usa una passkey"
   },
   "permanent": "Permanente",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Utente aggiornato!",
     "username": "Nome utente",
     "users": "Utenti",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Autenticazione a più fattori",
+    "mfaDescription": "Proteggi questo account con un’app di autenticazione o una passkey. Conferma la password attuale prima di apportare modifiche.",
+    "enableTotp": "Configura app di autenticazione",
+    "totpEnabled": "App di autenticazione attivata",
+    "addPasskey": "Aggiungi una passkey",
+    "passkeyAdded": "Passkey aggiunta",
+    "passkeysRegistered": "Passkey registrate: {count}"
   },
   "sidebar": {
     "help": "Aiuto",

@@ -66,7 +66,8 @@
     "forbidden": "شما مجوز دسترسی به این را ندارید.",
     "internal": "اشتباهی اتفاق افتاده است",
     "notFound": "این محل قابل دسترسی نیست",
-    "connection": "سرور قابل دسترسی نیست"
+    "connection": "سرور قابل دسترسی نیست",
+    "passkeyFailed": "احراز هویت با کلید عبور کامل نشد."
   },
   "files": {
     "body": "بدنه",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "کد احراز هویت",
+    "verifyTotp": "تأیید کد",
+    "usePasskey": "استفاده از کلید عبور"
   },
   "permanent": "دائمی",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "کاربر به روز شد!",
     "username": "نام کاربری",
     "users": "کاربران",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "احراز هویت چندعاملی",
+    "mfaDescription": "از این حساب با برنامهٔ احراز هویت یا کلید عبور محافظت کنید. پیش از تغییرات، گذرواژهٔ فعلی را تأیید کنید.",
+    "enableTotp": "راه‌اندازی برنامهٔ احراز هویت",
+    "totpEnabled": "برنامهٔ احراز هویت فعال شد",
+    "addPasskey": "افزودن کلید عبور",
+    "passkeyAdded": "کلید عبور افزوده شد",
+    "passkeysRegistered": "{count} کلید عبور ثبت شده است"
   },
   "sidebar": {
     "help": "راهنما",

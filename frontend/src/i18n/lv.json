@@ -68,7 +68,8 @@
     "forbidden": "Jums nav atļaujas piekļūt šim.",
     "internal": "Kaut kas tiešām nogāja greizi.",
     "notFound": "Šo atrašanās vietu nevar sasniegt.",
-    "connection": "Ar serveri nevar sazināties."
+    "connection": "Ar serveri nevar sazināties.",
+    "passkeyFailed": "Neizdevās pabeigt autentifikāciju ar piekļuves atslēgu."
   },
   "files": {
     "body": "Ķermenis",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Parolei jābūt vismaz {min} rakstzīmju garai",
     "logout_reasons": {
       "inactivity": "Jūs esat atteicies no sistēmas neaktivitātes dēļ."
-    }
+    },
+    "totpCode": "Autentifikācijas kods",
+    "verifyTotp": "Pārbaudīt kodu",
+    "usePasskey": "Lietot piekļuves atslēgu"
   },
   "permanent": "Pastāvīgs",
   "prompts": {
@@ -280,7 +284,14 @@
     "userUpdated": "Lietotājs atjaunināts!",
     "username": "Lietotājvārds",
     "users": "Lietotāji",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Daudzfaktoru autentifikācija",
+    "mfaDescription": "Aizsargājiet šo kontu ar autentifikācijas lietotni vai piekļuves atslēgu. Pirms izmaiņām apstipriniet pašreizējo paroli.",
+    "enableTotp": "Iestatīt autentifikācijas lietotni",
+    "totpEnabled": "Autentifikācijas lietotne ir iespējota",
+    "addPasskey": "Pievienot piekļuves atslēgu",
+    "passkeyAdded": "Piekļuves atslēga pievienota",
+    "passkeysRegistered": "Reģistrētās piekļuves atslēgas: {count}"
   },
   "sidebar": {
     "diskUsed": "{used} of {total} used",

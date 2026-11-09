@@ -66,7 +66,8 @@
     "forbidden": "Nu ai permisiuni sa accesezi asta.",
     "internal": "Ceva nu a funcționat corect.",
     "notFound": "Aceasta locație nu poate fi accesată.",
-    "connection": "The server can't be reached."
+    "connection": "The server can't be reached.",
+    "passkeyFailed": "Autentificarea cu cheia de acces nu a putut fi finalizată."
   },
   "files": {
     "body": "Corp",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Cod de autentificare",
+    "verifyTotp": "Verifică codul",
+    "usePasskey": "Utilizează o cheie de acces"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Utilizator actualizat!",
     "username": "Utilizator",
     "users": "Utilizatori",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Autentificare cu mai mulți factori",
+    "mfaDescription": "Protejează acest cont cu o aplicație de autentificare sau o cheie de acces. Confirmă parola curentă înainte de modificări.",
+    "enableTotp": "Configurează aplicația de autentificare",
+    "totpEnabled": "Aplicație de autentificare activată",
+    "addPasskey": "Adaugă o cheie de acces",
+    "passkeyAdded": "Cheie de acces adăugată",
+    "passkeysRegistered": "Chei de acces înregistrate: {count}"
   },
   "sidebar": {
     "help": "Ajutor",

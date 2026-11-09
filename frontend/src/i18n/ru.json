@@ -68,7 +68,8 @@
     "forbidden": "У вас нет прав доступа к этому.",
     "internal": "Что-то пошло не так.",
     "notFound": "Неправильная ссылка.",
-    "connection": "Нет подключения к серверу."
+    "connection": "Нет подключения к серверу.",
+    "passkeyFailed": "Не удалось завершить аутентификацию с помощью ключа доступа."
   },
   "files": {
     "body": "Тело",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Пароль должен состоять как минимум из {min} символов",
     "logout_reasons": {
       "inactivity": "Сессия завершена после долгого отсутствия."
-    }
+    },
+    "totpCode": "Код аутентификации",
+    "verifyTotp": "Проверить код",
+    "usePasskey": "Использовать ключ доступа"
   },
   "permanent": "Постоянный",
   "prompts": {
@@ -280,7 +284,14 @@
     "userUpdated": "Пользователь изменен!",
     "username": "Имя пользователя",
     "users": "Пользователи",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Многофакторная аутентификация",
+    "mfaDescription": "Защитите эту учётную запись приложением для аутентификации или ключом доступа. Перед изменениями подтвердите текущий пароль.",
+    "enableTotp": "Настроить приложение для аутентификации",
+    "totpEnabled": "Приложение для аутентификации включено",
+    "addPasskey": "Добавить ключ доступа",
+    "passkeyAdded": "Ключ доступа добавлен",
+    "passkeysRegistered": "Зарегистрировано ключей доступа: {count}"
   },
   "sidebar": {
     "diskUsed": "{used} of {total} used",

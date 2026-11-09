@@ -66,7 +66,8 @@
     "forbidden": "Nemáte oprávnění k přístupu.",
     "internal": "Nastala vážná chyba.",
     "notFound": "Tuto lokaci nelze najít.",
-    "connection": "Server nelze dosáhnout."
+    "connection": "Server nelze dosáhnout.",
+    "passkeyFailed": "Ověření pomocí přístupového klíče se nepodařilo dokončit."
   },
   "files": {
     "body": "Tělo",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Ověřovací kód",
+    "verifyTotp": "Ověřit kód",
+    "usePasskey": "Použít přístupový klíč"
   },
   "permanent": "Trvalý",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Uživatel aktualizován!",
     "username": "Uživatelské jméno",
     "users": "Uživatelé",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Vícefaktorové ověřování",
+    "mfaDescription": "Chraňte tento účet pomocí ověřovací aplikace nebo přístupového klíče. Před změnami potvrďte aktuální heslo.",
+    "enableTotp": "Nastavit ověřovací aplikaci",
+    "totpEnabled": "Ověřovací aplikace je zapnutá",
+    "addPasskey": "Přidat přístupový klíč",
+    "passkeyAdded": "Přístupový klíč přidán",
+    "passkeysRegistered": "Registrované přístupové klíče: {count}"
   },
   "sidebar": {
     "help": "Nápověda",

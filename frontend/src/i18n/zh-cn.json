@@ -68,7 +68,8 @@
     "forbidden": "权限不足，拒绝访问",
     "internal": "服务器内部错误",
     "notFound": "该位置无法访问。",
-    "connection": "无法连接服务器"
+    "connection": "无法连接服务器",
+    "passkeyFailed": "无法完成通行密钥身份验证。"
   },
   "files": {
     "body": "内容",
@@ -126,7 +127,10 @@
     "passwordTooShort": "密码长度至少为 {min} 位字符",
     "logout_reasons": {
       "inactivity": "因长时间未操作，系统已自动登出."
-    }
+    },
+    "totpCode": "验证码",
+    "verifyTotp": "验证代码",
+    "usePasskey": "使用通行密钥"
   },
   "permanent": "永久",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "用户信息已更新！",
     "username": "用户名",
     "users": "用户",
-    "currentPassword": "当前密码"
+    "currentPassword": "当前密码",
+    "multiFactorAuthentication": "多重身份验证",
+    "mfaDescription": "使用身份验证器应用或通行密钥保护此账户。更改前请确认当前密码。",
+    "enableTotp": "设置身份验证器应用",
+    "totpEnabled": "身份验证器应用已启用",
+    "addPasskey": "添加通行密钥",
+    "passkeyAdded": "通行密钥已添加",
+    "passkeysRegistered": "已注册通行密钥：{count}"
   },
   "sidebar": {
     "diskUsed": "已使用 {used} / 总容量 {total}",

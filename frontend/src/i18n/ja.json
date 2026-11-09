@@ -66,7 +66,8 @@
     "forbidden": "これにアクセスする権限がありません。",
     "internal": "内部エラーが発生しました。",
     "notFound": "リソースが見つかりませんでした。",
-    "connection": "サーバーに接続できませんでした。"
+    "connection": "サーバーに接続できませんでした。",
+    "passkeyFailed": "パスキーによる認証を完了できませんでした。"
   },
   "files": {
     "body": "本文",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "認証コード",
+    "verifyTotp": "コードを確認",
+    "usePasskey": "パスキーを使用"
   },
   "permanent": "永久",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "ユーザーを更新しました！",
     "username": "ユーザー名",
     "users": "ユーザー",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "多要素認証",
+    "mfaDescription": "認証アプリまたはパスキーでこのアカウントを保護します。変更前に現在のパスワードを確認してください。",
+    "enableTotp": "認証アプリを設定",
+    "totpEnabled": "認証アプリを有効化しました",
+    "addPasskey": "パスキーを追加",
+    "passkeyAdded": "パスキーを追加しました",
+    "passkeysRegistered": "登録済みパスキー: {count}"
   },
   "sidebar": {
     "help": "ヘルプ",

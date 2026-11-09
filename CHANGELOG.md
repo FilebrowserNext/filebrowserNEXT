@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## File Browser Next 3.0.1-next (2026-11-09)
+
+### Features
+
+* **auth:** add encrypted TOTP and WebAuthn passkey enrollment and login verification
+* **ui:** move password and multi-factor authentication workflows into responsive dialogs
+* **i18n:** translate the new authentication interface into every supported locale
+
+### Security
+
+* **auth:** bind passkeys to explicitly configured relying-party origins and require user verification
+* **auth:** encrypt TOTP secrets and WebAuthn credential records at rest
+
+
 ## File Browser Next 3.0.0-next (2026-09-08)
 
 ### Security Fixes

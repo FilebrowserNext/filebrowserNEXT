@@ -66,7 +66,8 @@
     "forbidden": "您無權訪問。",
     "internal": "伺服器出了點問題。",
     "notFound": "找不到檔案。",
-    "connection": "無法連接到伺服器。"
+    "connection": "無法連接到伺服器。",
+    "passkeyFailed": "無法完成通行金鑰驗證。"
   },
   "files": {
     "body": "内容",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "驗證碼",
+    "verifyTotp": "驗證代碼",
+    "usePasskey": "使用通行金鑰"
   },
   "permanent": "永久",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "使用者已更新！",
     "username": "使用者名稱",
     "users": "使用者",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "多重要素驗證",
+    "mfaDescription": "使用驗證器應用程式或通行金鑰保護此帳戶。變更前請確認目前密碼。",
+    "enableTotp": "設定驗證器應用程式",
+    "totpEnabled": "驗證器應用程式已啟用",
+    "addPasskey": "新增通行金鑰",
+    "passkeyAdded": "通行金鑰已新增",
+    "passkeysRegistered": "已註冊通行金鑰：{count}"
   },
   "sidebar": {
     "help": "幫助",

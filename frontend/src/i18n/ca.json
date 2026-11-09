@@ -66,7 +66,8 @@
     "forbidden": "No tens els permisos necessaris per accedir.",
     "internal": "La veritat és que alguna cosa ha anat malament.",
     "notFound": "No es pot accedir a aquest lloc.",
-    "connection": "No es pot accedir al servidor."
+    "connection": "No es pot accedir al servidor.",
+    "passkeyFailed": "No s’ha pogut completar l’autenticació amb la clau d’accés."
   },
   "files": {
     "body": "Cos",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Codi d’autenticació",
+    "verifyTotp": "Verifica el codi",
+    "usePasskey": "Utilitza una clau d’accés"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Usuari actualitzat!",
     "username": "Usuari",
     "users": "Usuaris",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Autenticació multifactor",
+    "mfaDescription": "Protegiu aquest compte amb una aplicació d’autenticació o una clau d’accés. Confirmeu la contrasenya actual abans de fer canvis.",
+    "enableTotp": "Configura l’aplicació d’autenticació",
+    "totpEnabled": "Aplicació d’autenticació activada",
+    "addPasskey": "Afegeix una clau d’accés",
+    "passkeyAdded": "Clau d’accés afegida",
+    "passkeysRegistered": "{count} claus d’accés registrades"
   },
   "sidebar": {
     "help": "Ajuda",

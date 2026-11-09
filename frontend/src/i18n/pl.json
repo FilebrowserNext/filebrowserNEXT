@@ -68,7 +68,8 @@
     "forbidden": "Nie masz zezwolenia na dostęp do tego.",
     "internal": "Pojawił się poważny problem.",
     "notFound": "Ta lokalizacja jest nieosiągalna.",
-    "connection": "Serwer jest nieosiągalny."
+    "connection": "Serwer jest nieosiągalny.",
+    "passkeyFailed": "Nie można było ukończyć uwierzytelniania kluczem dostępu."
   },
   "files": {
     "body": "Zawartość",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Wymagana minimalna liczba znaków hasła: {min}",
     "logout_reasons": {
       "inactivity": "Wylogowano z powodu braku aktywności."
-    }
+    },
+    "totpCode": "Kod uwierzytelniający",
+    "verifyTotp": "Zweryfikuj kod",
+    "usePasskey": "Użyj klucza dostępu"
   },
   "permanent": "Permanentny",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "Użytkownik zapisany!",
     "username": "Nazwa użytkownika",
     "users": "Użytkownicy",
-    "currentPassword": "Twoje aktualne hasło"
+    "currentPassword": "Twoje aktualne hasło",
+    "multiFactorAuthentication": "Uwierzytelnianie wieloskładnikowe",
+    "mfaDescription": "Chroń to konto aplikacją uwierzytelniającą lub kluczem dostępu. Potwierdź bieżące hasło przed zmianami.",
+    "enableTotp": "Skonfiguruj aplikację uwierzytelniającą",
+    "totpEnabled": "Aplikacja uwierzytelniająca włączona",
+    "addPasskey": "Dodaj klucz dostępu",
+    "passkeyAdded": "Klucz dostępu dodany",
+    "passkeysRegistered": "Zarejestrowane klucze dostępu: {count}"
   },
   "sidebar": {
     "diskUsed": "Wykorzystano {used} z {total}",

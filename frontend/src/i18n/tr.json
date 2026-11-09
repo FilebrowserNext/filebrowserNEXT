@@ -66,7 +66,8 @@
     "forbidden": "Buna erişim izniniz yok.",
     "internal": "Bir şeyler ters gitti.",
     "notFound": "Bu konuma ulaşılamıyor.",
-    "connection": "Sunucuya ulaşılamıyor."
+    "connection": "Sunucuya ulaşılamıyor.",
+    "passkeyFailed": "Geçiş anahtarıyla kimlik doğrulama tamamlanamadı."
   },
   "files": {
     "body": "Sayfa",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Doğrulama kodu",
+    "verifyTotp": "Kodu doğrula",
+    "usePasskey": "Geçiş anahtarı kullan"
   },
   "permanent": "Kalıcı",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Kullanıcı güncellendi!",
     "username": "Kullanıcı adı",
     "users": "Kullanıcılar",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Çok faktörlü kimlik doğrulama",
+    "mfaDescription": "Bu hesabı bir kimlik doğrulama uygulaması veya geçiş anahtarıyla koruyun. Değişikliklerden önce mevcut parolanızı doğrulayın.",
+    "enableTotp": "Kimlik doğrulama uygulamasını ayarla",
+    "totpEnabled": "Kimlik doğrulama uygulaması etkin",
+    "addPasskey": "Geçiş anahtarı ekle",
+    "passkeyAdded": "Geçiş anahtarı eklendi",
+    "passkeysRegistered": "Kayıtlı geçiş anahtarları: {count}"
   },
   "sidebar": {
     "help": "Yardım",

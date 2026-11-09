@@ -71,7 +71,7 @@
 
   <!-- Subtle Badge Pill -->
   <rect x="425" y="280" width="160" height="32" rx="16" fill="rgba(99, 102, 241, 0.2)" stroke="rgba(99, 102, 241, 0.4)" stroke-width="1" />
-  <text x="440" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#a5b4fc">v3.0.0-next</text>
+  <text x="440" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#a5b4fc">v3.0.1-next</text>
 
   <rect x="600" y="280" width="170" height="32" rx="16" fill="rgba(16, 185, 129, 0.15)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1" />
   <text x="615" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#6ee7b7">Security Hardened</text>

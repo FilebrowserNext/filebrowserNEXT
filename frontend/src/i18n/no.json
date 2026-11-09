@@ -66,7 +66,8 @@
     "forbidden": "Du har ikkje tilgang til denne filen.",
     "internal": "Noko gikk virkelig galt.",
     "notFound": "Denne lokasjonen kan ikkje bli nådd.",
-    "connection": "Denne serveren kan ikkje nås."
+    "connection": "Denne serveren kan ikkje nås.",
+    "passkeyFailed": "Kunne ikke fullføre autentisering med passnøkkel."
   },
   "files": {
     "body": "Kropp",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "Du har blitt logget ut på grunn av inaktivitet"
-    }
+    },
+    "totpCode": "Autentiseringskode",
+    "verifyTotp": "Bekreft kode",
+    "usePasskey": "Bruk en passnøkkel"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Bruker opprettet!",
     "username": "Brukernavn",
     "users": "Bruker",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Flerfaktorautentisering",
+    "mfaDescription": "Beskytt denne kontoen med en autentiseringsapp eller passnøkkel. Bekreft gjeldende passord før du gjør endringer.",
+    "enableTotp": "Sett opp autentiseringsapp",
+    "totpEnabled": "Autentiseringsapp aktivert",
+    "addPasskey": "Legg til en passnøkkel",
+    "passkeyAdded": "Passnøkkel lagt til",
+    "passkeysRegistered": "Registrerte passnøkler: {count}"
   },
   "sidebar": {
     "help": "Hjelp",

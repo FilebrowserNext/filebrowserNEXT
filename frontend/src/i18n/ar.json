@@ -66,7 +66,8 @@
     "forbidden": "ليست لديك الصلاحيات للوصول لهذا المحتوى.",
     "internal": "لقد حدث خطأ ما.",
     "notFound": "لا يمكن الوصول لهذا المحتوى.",
-    "connection": "لا يمكن اﻹتصال بالخادم."
+    "connection": "لا يمكن اﻹتصال بالخادم.",
+    "passkeyFailed": "تعذر إكمال المصادقة بمفتاح المرور."
   },
   "files": {
     "body": "الصفحة",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "رمز المصادقة",
+    "verifyTotp": "تحقق من الرمز",
+    "usePasskey": "استخدم مفتاح مرور"
   },
   "permanent": "دائم",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "تم تعديل المستخدم",
     "username": "إسم المستخدم",
     "users": "المستخدمين",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "المصادقة متعددة العوامل",
+    "mfaDescription": "احم هذا الحساب بتطبيق مصادقة أو مفتاح مرور. أكّد كلمة مرورك الحالية قبل إجراء التغييرات.",
+    "enableTotp": "إعداد تطبيق المصادقة",
+    "totpEnabled": "تم تفعيل تطبيق المصادقة",
+    "addPasskey": "إضافة مفتاح مرور",
+    "passkeyAdded": "تمت إضافة مفتاح المرور",
+    "passkeysRegistered": "تم تسجيل {count} من مفاتيح المرور"
   },
   "sidebar": {
     "help": "مساعدة",

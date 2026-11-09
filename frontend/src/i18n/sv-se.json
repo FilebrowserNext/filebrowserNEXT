@@ -66,7 +66,8 @@
     "forbidden": "Du saknar rättigheter till detta",
     "internal": "Något gick fel",
     "notFound": "Det går inte att nå den här platsen.",
-    "connection": "Servern går inte att nå."
+    "connection": "Servern går inte att nå.",
+    "passkeyFailed": "Det gick inte att slutföra autentiseringen med passnyckel."
   },
   "files": {
     "body": "Huvud",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "Du har blivit utloggad på grund av inaktivitet."
-    }
+    },
+    "totpCode": "Autentiseringskod",
+    "verifyTotp": "Verifiera kod",
+    "usePasskey": "Använd en passnyckel"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Användare uppdaterad!",
     "username": "Användarnamn",
     "users": "Användare",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Flerfaktorsautentisering",
+    "mfaDescription": "Skydda detta konto med en autentiseringsapp eller passnyckel. Bekräfta ditt nuvarande lösenord innan du gör ändringar.",
+    "enableTotp": "Konfigurera autentiseringsapp",
+    "totpEnabled": "Autentiseringsapp aktiverad",
+    "addPasskey": "Lägg till en passnyckel",
+    "passkeyAdded": "Passnyckel tillagd",
+    "passkeysRegistered": "Registrerade passnycklar: {count}"
   },
   "sidebar": {
     "help": "Hjälp",

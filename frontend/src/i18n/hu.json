@@ -66,7 +66,8 @@
     "forbidden": "Nincs jogosultsága a hozzáféréshez.",
     "internal": "Valami nagyon elromlott.",
     "notFound": "Ez a hely nem érhető el.",
-    "connection": "A kiszolgáló nem érhető el."
+    "connection": "A kiszolgáló nem érhető el.",
+    "passkeyFailed": "A jelszókulcsos hitelesítés nem fejezhető be."
   },
   "files": {
     "body": "Törzs",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Hitelesítési kód",
+    "verifyTotp": "Kód ellenőrzése",
+    "usePasskey": "Jelszókulcs használata"
   },
   "permanent": "Állandó",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Felhasználó frissítve!",
     "username": "Felhasználói név",
     "users": "Felhasználók",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Többlépcsős hitelesítés",
+    "mfaDescription": "Védje ezt a fiókot hitelesítő alkalmazással vagy jelszókulccsal. A módosítások előtt erősítse meg jelenlegi jelszavát.",
+    "enableTotp": "Hitelesítő alkalmazás beállítása",
+    "totpEnabled": "Hitelesítő alkalmazás engedélyezve",
+    "addPasskey": "Jelszókulcs hozzáadása",
+    "passkeyAdded": "Jelszókulcs hozzáadva",
+    "passkeysRegistered": "Regisztrált jelszókulcsok: {count}"
   },
   "sidebar": {
     "help": "Súgó",

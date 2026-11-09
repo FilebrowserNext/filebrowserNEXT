@@ -66,7 +66,8 @@
     "forbidden": "У вас немає прав доступу до цього.",
     "internal": "Щось пішло не так.",
     "notFound": "Неправильне посилання.",
-    "connection": "Немає підключення до сервера."
+    "connection": "Немає підключення до сервера.",
+    "passkeyFailed": "Не вдалося завершити автентифікацію за допомогою ключа доступу."
   },
   "files": {
     "body": "Тіло",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Код автентифікації",
+    "verifyTotp": "Перевірити код",
+    "usePasskey": "Використати ключ доступу"
   },
   "permanent": "Постійний",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Користувача змінено!",
     "username": "Ім'я користувача",
     "users": "Користувачі",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Багатофакторна автентифікація",
+    "mfaDescription": "Захистіть цей обліковий запис програмою автентифікації або ключем доступу. Підтвердьте поточний пароль перед змінами.",
+    "enableTotp": "Налаштувати програму автентифікації",
+    "totpEnabled": "Програму автентифікації ввімкнено",
+    "addPasskey": "Додати ключ доступу",
+    "passkeyAdded": "Ключ доступу додано",
+    "passkeysRegistered": "Зареєстровані ключі доступу: {count}"
   },
   "sidebar": {
     "help": "Допомога",

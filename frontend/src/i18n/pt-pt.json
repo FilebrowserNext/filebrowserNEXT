@@ -68,7 +68,8 @@
     "forbidden": "Não tem permissão para aceder a isto.",
     "internal": "Algo correu mal.",
     "notFound": "Esta localização não pôde ser alcançada.",
-    "connection": "Este servidor não pôde ser alcançado."
+    "connection": "Este servidor não pôde ser alcançado.",
+    "passkeyFailed": "Não foi possível concluir a autenticação com chave de acesso."
   },
   "files": {
     "body": "Corpo",
@@ -126,7 +127,10 @@
     "passwordTooShort": "A palavra-passe tem de ter pelo menos {min} caracteres",
     "logout_reasons": {
       "inactivity": "Foi terminada a sessão por inactividade."
-    }
+    },
+    "totpCode": "Código de autenticação",
+    "verifyTotp": "Verificar código",
+    "usePasskey": "Utilizar uma chave de acesso"
   },
   "permanent": "Permanente",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "Utilizador actualizado!",
     "username": "Nome de utilizador",
     "users": "Utilizadores",
-    "currentPassword": "A Sua Palavra-passe Actual"
+    "currentPassword": "A Sua Palavra-passe Actual",
+    "multiFactorAuthentication": "Autenticação multifator",
+    "mfaDescription": "Proteja esta conta com uma aplicação de autenticação ou uma chave de acesso. Confirme a palavra-passe atual antes de efetuar alterações.",
+    "enableTotp": "Configurar aplicação de autenticação",
+    "totpEnabled": "Aplicação de autenticação ativada",
+    "addPasskey": "Adicionar uma chave de acesso",
+    "passkeyAdded": "Chave de acesso adicionada",
+    "passkeysRegistered": "{count} chaves de acesso registadas"
   },
   "sidebar": {
     "diskUsed": "{used} of {total} used",

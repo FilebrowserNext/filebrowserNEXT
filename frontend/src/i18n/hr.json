@@ -68,7 +68,8 @@
     "forbidden": "Nemate dopuštenje pristupiti ovome.",
     "internal": "Nešto je stvarno pošlo po zlu.",
     "notFound": "Lokacija ne može biti dohvaćena.",
-    "connection": "Poslužitelj ne može biti dohvaćen."
+    "connection": "Poslužitelj ne može biti dohvaćen.",
+    "passkeyFailed": "Autentifikaciju pristupnim ključem nije bilo moguće dovršiti."
   },
   "files": {
     "body": "Tijelo",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Lozinka mora sadržavati minimalno {min} znakova",
     "logout_reasons": {
       "inactivity": "Odjavljeni ste zbog neaktivnosti."
-    }
+    },
+    "totpCode": "Autentifikacijski kod",
+    "verifyTotp": "Potvrdi kod",
+    "usePasskey": "Upotrijebi pristupni ključ"
   },
   "permanent": "Trajan",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "Korisnik ažuriran!",
     "username": "Korisničko ime",
     "users": "Korisnici",
-    "currentPassword": "Vaša trenutna lozinka"
+    "currentPassword": "Vaša trenutna lozinka",
+    "multiFactorAuthentication": "Višefaktorska autentifikacija",
+    "mfaDescription": "Zaštitite ovaj račun aplikacijom za autentifikaciju ili pristupnim ključem. Potvrdite trenutačnu lozinku prije promjena.",
+    "enableTotp": "Postavi aplikaciju za autentifikaciju",
+    "totpEnabled": "Aplikacija za autentifikaciju je uključena",
+    "addPasskey": "Dodaj pristupni ključ",
+    "passkeyAdded": "Pristupni ključ dodan",
+    "passkeysRegistered": "Registrirani pristupni ključevi: {count}"
   },
   "sidebar": {
     "diskUsed": "{used} of {total} used",

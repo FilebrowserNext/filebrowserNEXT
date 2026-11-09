@@ -66,7 +66,8 @@
     "forbidden": "You don't have permissions to access this.",
     "internal": "Something really went wrong.",
     "notFound": "This location can't be reached.",
-    "connection": "The server can't be reached."
+    "connection": "The server can't be reached.",
+    "passkeyFailed": "Overenie pomocou prístupového kľúča sa nepodarilo dokončiť."
   },
   "files": {
     "body": "Telo",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "Boli ste odhlásení z dôvodu nečinnosti."
-    }
+    },
+    "totpCode": "Overovací kód",
+    "verifyTotp": "Overiť kód",
+    "usePasskey": "Použiť prístupový kľúč"
   },
   "permanent": "Trvalé",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Používateľ upravený!",
     "username": "Meno používateľa",
     "users": "Používatelia",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Viacfaktorové overovanie",
+    "mfaDescription": "Chráňte tento účet overovacou aplikáciou alebo prístupovým kľúčom. Pred zmenami potvrďte aktuálne heslo.",
+    "enableTotp": "Nastaviť overovaciu aplikáciu",
+    "totpEnabled": "Overovacia aplikácia je zapnutá",
+    "addPasskey": "Pridať prístupový kľúč",
+    "passkeyAdded": "Prístupový kľúč pridaný",
+    "passkeysRegistered": "Registrované prístupové kľúče: {count}"
   },
   "sidebar": {
     "help": "Pomoc",

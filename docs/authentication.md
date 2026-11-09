@@ -26,6 +26,42 @@ filebrowser config set --recaptcha.host https://recaptcha.net
 
 Where `https://recaptcha.net` is any provider you want.
 
+## Multi-factor authentication
+
+File Browser Next supports two optional second factors for every account:
+
+- **TOTP**: a six-digit code from a compatible authenticator application;
+- **Passkeys**: a WebAuthn credential stored by a browser, device, security key, or password manager.
+
+After a password has been accepted, an account with at least one configured factor must complete TOTP or passkey verification before a session token is issued. Both factors can be enabled on the same account so that people may choose either method at login.
+
+### Configure passkeys
+
+Passkeys require a stable, HTTPS public origin. Configure the relying-party ID and every public origin that is allowed to use the passkeys. Do not use an internal address or a wildcard.
+
+```sh
+filebrowser config set \
+  --webAuthnRPID files.example.org \
+  --webAuthnOrigins https://files.example.org
+```
+
+The relying-party ID is the public hostname without scheme or port. Each origin includes its scheme and, when applicable, port. If a reverse proxy terminates TLS, use the browser-visible HTTPS address, not the proxy's internal upstream address.
+
+The passkey controls remain unavailable until both values are configured. Changing either value makes previously registered passkeys unavailable for the old origin, so plan origin changes carefully.
+
+### Enroll and use a factor
+
+1. Sign in normally and open **Settings → Profile**.
+2. Enter the current password under **Multi-factor authentication**.
+3. For TOTP, select **Set up authenticator app**, scan the displayed QR code or copy its setup URI into an authenticator application, then confirm its six-digit code.
+4. For a passkey, select **Add a passkey** and complete the browser or security-key prompt.
+
+At the next sign-in, the application asks for an available factor after the password. Removing the final factor restores password-only sign-in. Keep a separate recovery path under your own administration before requiring MFA for critical accounts.
+
+### Security properties
+
+TOTP secrets and WebAuthn credential records are encrypted before they are stored in the database, using key material derived from the instance key. Back up the database and instance configuration together: changing the instance key without migrating these records prevents their decryption. Authentication ceremonies expire after five minutes, passkeys require user verification, and login attempts share the existing rate limit.
+
 ## Proxy Header
 
 If you have a reverse proxy you want to use to login your users, you do it via our `proxy` authentication method. To configure this method, your proxy must send an HTTP header containing the username of the logged in user:

@@ -48,11 +48,21 @@ export async function validateLogin() {
   }
 }
 
+export interface MFAChallenge {
+  transaction: string;
+  methods: string[];
+}
+
+type PublicKeyEnvelope = {
+  transaction: string;
+  publicKey: PublicKeyCredentialRequestOptions;
+};
+
 export async function login(
   username: string,
   password: string,
   recaptcha: string
-) {
+): Promise<MFAChallenge | null> {
   const data = { username, password, recaptcha };
 
   const res = await fetch(`${baseURL}/api/login`, {
@@ -67,12 +77,102 @@ export async function login(
 
   if (res.status === 200) {
     parseToken(body);
+    return null;
+  } else if (res.status === 202) {
+    return JSON.parse(body) as MFAChallenge;
   } else {
     throw new StatusError(
       body || `${res.status} ${res.statusText}`,
       res.status
     );
   }
+}
+
+export async function completeTOTPLogin(transaction: string, code: string) {
+  const res = await fetch(`${baseURL}/api/login/mfa/totp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ transaction, code }),
+  });
+  const body = await res.text();
+  if (res.status === 200) return parseToken(body);
+  throw new StatusError(body || `${res.status} ${res.statusText}`, res.status);
+}
+
+function decodeBase64(value: string): ArrayBuffer {
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const binary = atob(
+    normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=")
+  );
+  return Uint8Array.from(binary, (char) => char.charCodeAt(0)).buffer;
+}
+
+function encodeBase64(value: ArrayBuffer): string {
+  return btoa(String.fromCharCode(...new Uint8Array(value)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+function requestOptions(
+  options: PublicKeyCredentialRequestOptions
+): PublicKeyCredentialRequestOptions {
+  return {
+    ...options,
+    challenge: decodeBase64(options.challenge as unknown as string),
+    allowCredentials: options.allowCredentials?.map((credential) => ({
+      ...credential,
+      id: decodeBase64(credential.id as unknown as string),
+    })),
+  };
+}
+
+function passkeyPayload(
+  credential: PublicKeyCredential
+): Record<string, unknown> {
+  const response = credential.response as AuthenticatorAssertionResponse;
+  return {
+    id: credential.id,
+    rawId: encodeBase64(credential.rawId),
+    type: credential.type,
+    response: {
+      authenticatorData: encodeBase64(response.authenticatorData),
+      clientDataJSON: encodeBase64(response.clientDataJSON),
+      signature: encodeBase64(response.signature),
+      userHandle: response.userHandle
+        ? encodeBase64(response.userHandle)
+        : null,
+    },
+  };
+}
+
+export async function completePasskeyLogin(transaction: string) {
+  const begin = await fetch(`${baseURL}/api/login/mfa/passkey/begin`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ transaction }),
+  });
+  const envelope = (await begin.json()) as PublicKeyEnvelope;
+  if (!begin.ok) throw new StatusError("passkey_failed", begin.status);
+  const credential = await navigator.credentials.get({
+    publicKey: requestOptions(envelope.publicKey),
+  });
+  if (!(credential instanceof PublicKeyCredential))
+    throw new Error("passkey_failed");
+  const finish = await fetch(`${baseURL}/api/login/mfa/passkey`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      transaction: envelope.transaction,
+      ...passkeyPayload(credential),
+    }),
+  });
+  const body = await finish.text();
+  if (finish.status === 200) return parseToken(body);
+  throw new StatusError(
+    body || `${finish.status} ${finish.statusText}`,
+    finish.status
+  );
 }
 
 export async function renew(jwt: string) {

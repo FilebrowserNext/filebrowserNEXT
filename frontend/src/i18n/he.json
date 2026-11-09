@@ -66,7 +66,8 @@
     "forbidden": "אין לך הרשאות גישה",
     "internal": "משהו השתבש",
     "notFound": "לא ניתן להגיע למיקום זה",
-    "connection": "לא ניתן להגיע לשרת"
+    "connection": "לא ניתן להגיע לשרת",
+    "passkeyFailed": "לא ניתן היה להשלים את האימות באמצעות מפתח הגישה."
   },
   "files": {
     "body": "גוף",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "קוד אימות",
+    "verifyTotp": "אימות קוד",
+    "usePasskey": "שימוש במפתח גישה"
   },
   "permanent": "קבוע",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "המשתמש עודכן!",
     "username": "שם משתמש",
     "users": "משתמשים",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "אימות רב-גורמי",
+    "mfaDescription": "הגנו על החשבון בעזרת יישום אימות או מפתח גישה. אשרו את הסיסמה הנוכחית לפני ביצוע שינויים.",
+    "enableTotp": "הגדרת יישום אימות",
+    "totpEnabled": "יישום האימות הופעל",
+    "addPasskey": "הוספת מפתח גישה",
+    "passkeyAdded": "מפתח הגישה נוסף",
+    "passkeysRegistered": "{count} מפתחות גישה רשומים"
   },
   "sidebar": {
     "help": "עזרה",

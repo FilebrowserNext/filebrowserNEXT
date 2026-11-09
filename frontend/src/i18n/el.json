@@ -66,7 +66,8 @@
     "forbidden": "Δεν έχετε άδεια πρόσβασης σε αυτό.",
     "internal": "Προέκυψε εσωτερικό σφάλμα.",
     "notFound": "Αυτή η τοποθεσία δεν μπορεί να βρεθεί.",
-    "connection": "Ο διακομιστής δεν είναι διαθέσιμος."
+    "connection": "Ο διακομιστής δεν είναι διαθέσιμος.",
+    "passkeyFailed": "Δεν ήταν δυνατή η ολοκλήρωση του ελέγχου ταυτότητας με passkey."
   },
   "files": {
     "body": "Περιεχόμενο",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Κωδικός ελέγχου ταυτότητας",
+    "verifyTotp": "Επαλήθευση κωδικού",
+    "usePasskey": "Χρήση passkey"
   },
   "permanent": "Μόνιμο",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Ο χρήστης ενημερώθηκε!",
     "username": "Όνομα χρήστη",
     "users": "Χρήστες",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Έλεγχος ταυτότητας πολλαπλών παραγόντων",
+    "mfaDescription": "Προστατέψτε αυτόν τον λογαριασμό με εφαρμογή ελέγχου ταυτότητας ή passkey. Επιβεβαιώστε τον τρέχοντα κωδικό πριν από αλλαγές.",
+    "enableTotp": "Ρύθμιση εφαρμογής ελέγχου ταυτότητας",
+    "totpEnabled": "Η εφαρμογή ελέγχου ταυτότητας ενεργοποιήθηκε",
+    "addPasskey": "Προσθήκη passkey",
+    "passkeyAdded": "Το passkey προστέθηκε",
+    "passkeysRegistered": "Καταχωρημένα passkeys: {count}"
   },
   "sidebar": {
     "help": "Βοήθεια",

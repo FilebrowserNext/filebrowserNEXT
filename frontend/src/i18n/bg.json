@@ -66,7 +66,8 @@
     "forbidden": "Нямате право на достъп.",
     "internal": "Взникна грешка.",
     "notFound": "Локацията не може да бъде достигната.",
-    "connection": "Сървъра не може да бъде достигнат."
+    "connection": "Сървъра не може да бъде достигнат.",
+    "passkeyFailed": "Удостоверяването с ключ за достъп не завърши."
   },
   "files": {
     "body": "Тяло",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "Бяхте разлогнати поради неактивност"
-    }
+    },
+    "totpCode": "Код за удостоверяване",
+    "verifyTotp": "Потвърдете кода",
+    "usePasskey": "Използване на ключ за достъп"
   },
   "permanent": "Постоянен",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Потребителя е обновен!",
     "username": "Потребителско име",
     "users": "Потребители",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Многофакторно удостоверяване",
+    "mfaDescription": "Защитете този профил с приложение за удостоверяване или ключ за достъп. Потвърдете текущата си парола преди промени.",
+    "enableTotp": "Настройване на приложение за удостоверяване",
+    "totpEnabled": "Приложението за удостоверяване е включено",
+    "addPasskey": "Добавяне на ключ за достъп",
+    "passkeyAdded": "Ключът за достъп е добавен",
+    "passkeysRegistered": "Регистрирани ключове за достъп: {count}"
   },
   "sidebar": {
     "help": "Помощ",

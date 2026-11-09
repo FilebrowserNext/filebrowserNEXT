@@ -68,7 +68,8 @@
     "forbidden": "접근 권한이 없습니다.",
     "internal": "오류가 발생하였습니다.",
     "notFound": "해당 경로를 찾을 수 없습니다.",
-    "connection": "서버에 연결할 수 없습니다."
+    "connection": "서버에 연결할 수 없습니다.",
+    "passkeyFailed": "패스키 인증을 완료할 수 없습니다."
   },
   "files": {
     "body": "본문",
@@ -126,7 +127,10 @@
     "passwordTooShort": "비밀번호는 최소 {min}자 이상이어야 함",
     "logout_reasons": {
       "inactivity": "활동이 없어 로그아웃 되었습니다."
-    }
+    },
+    "totpCode": "인증 코드",
+    "verifyTotp": "코드 확인",
+    "usePasskey": "패스키 사용"
   },
   "permanent": "영구",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "사용자 수정됨!",
     "username": "사용자 이름",
     "users": "사용자",
-    "currentPassword": "현재 비밀번호"
+    "currentPassword": "현재 비밀번호",
+    "multiFactorAuthentication": "다단계 인증",
+    "mfaDescription": "인증 앱 또는 패스키로 이 계정을 보호합니다. 변경하기 전에 현재 비밀번호를 확인하세요.",
+    "enableTotp": "인증 앱 설정",
+    "totpEnabled": "인증 앱이 활성화되었습니다",
+    "addPasskey": "패스키 추가",
+    "passkeyAdded": "패스키가 추가되었습니다",
+    "passkeysRegistered": "등록된 패스키: {count}"
   },
   "sidebar": {
     "diskUsed": "{total} 중 {used} 사용",

@@ -107,6 +107,8 @@ func addServerFlags(flags *pflag.FlagSet) {
 	flags.String("socket", "", "socket to listen to (cannot be used with address, port, cert nor key flags)")
 	flags.StringP("baseURL", "b", "", "base url")
 	flags.String("tokenExpirationTime", "2h", "user session timeout")
+	flags.String("webAuthnRPID", "", "passkey relying party ID, for example files.example.org")
+	flags.StringSlice("webAuthnOrigins", nil, "allowed passkey origins, for example https://files.example.org")
 	flags.Bool("disableThumbnails", false, "disable image thumbnails")
 	flags.Bool("disablePreviewResize", false, "disable resize of image previews")
 	flags.Bool("disableExec", true, "disables Command Runner feature")
@@ -337,6 +339,14 @@ func getServerSettings(v *viper.Viper, st *storage.Storage) (*settings.Server, e
 		server.TokenExpirationTime = v.GetString("tokenExpirationTime")
 	}
 
+	if v.IsSet("webAuthnRPID") {
+		server.WebAuthnRPID = v.GetString("webAuthnRPID")
+	}
+
+	if v.IsSet("webAuthnOrigins") {
+		server.WebAuthnOrigins = v.GetStringSlice("webAuthnOrigins")
+	}
+
 	if v.IsSet("disableThumbnails") {
 		server.EnableThumbnails = !v.GetBool("disableThumbnails")
 	}
@@ -481,6 +491,8 @@ func quickSetup(v *viper.Viper, s *storage.Storage) error {
 		Address:                v.GetString("address"),
 		Root:                   v.GetString("root"),
 		TokenExpirationTime:    v.GetString("tokenExpirationTime"),
+		WebAuthnRPID:           v.GetString("webAuthnRPID"),
+		WebAuthnOrigins:        v.GetStringSlice("webAuthnOrigins"),
 		EnableThumbnails:       !v.GetBool("disableThumbnails"),
 		ResizePreview:          !v.GetBool("disablePreviewResize"),
 		EnableExec:             !v.GetBool("disableExec"),

@@ -54,10 +54,24 @@ func NewHandler(
 	api := r.PathPrefix("/api").Subrouter()
 
 	tokenExpirationTime := server.GetTokenExpirationTime(DefaultTokenExpirationTime)
-	api.Handle("/login", monkey(loginHandler(tokenExpirationTime), ""))
+	api.Handle("/login", monkey(loginHandler(tokenExpirationTime), "")).Methods("POST")
+	api.Handle("/login/mfa/totp", monkey(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
+		return completeTOTPLogin(w, r, d, tokenExpirationTime)
+	}, "")).Methods("POST")
+	api.Handle("/login/mfa/passkey/begin", monkey(passkeyLoginBegin, "")).Methods("POST")
+	api.Handle("/login/mfa/passkey", monkey(func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
+		return completePasskeyLogin(w, r, d, tokenExpirationTime)
+	}, "")).Methods("POST")
 	api.Handle("/signup", monkey(signupHandler, ""))
 	api.Handle("/renew", monkey(renewHandler(tokenExpirationTime), ""))
 	api.Handle("/logout", monkey(logoutHandler, "")).Methods("POST")
+	api.Handle("/mfa", monkey(withUser(mfaStatusHandler), "")).Methods("GET")
+	api.Handle("/mfa/totp", monkey(withUser(totpBeginHandler), "")).Methods("POST")
+	api.Handle("/mfa/totp/confirm", monkey(withUser(totpConfirmHandler), "")).Methods("POST")
+	api.Handle("/mfa/totp", monkey(withUser(mfaDeleteTOTPHandler), "")).Methods("DELETE")
+	api.Handle("/mfa/passkey", monkey(withUser(passkeyBeginHandler), "")).Methods("POST")
+	api.Handle("/mfa/passkey/confirm", monkey(withUser(passkeyFinishHandler), "")).Methods("POST")
+	api.Handle("/mfa/passkey", monkey(withUser(mfaDeletePasskeyHandler), "")).Methods("DELETE")
 
 	users := api.PathPrefix("/users").Subrouter()
 	users.Handle("", monkey(usersGetHandler, "")).Methods("GET")

@@ -190,10 +190,37 @@ func loginHandler(tokenExpireTime time.Duration) handleFunc {
 			return http.StatusInternalServerError, err
 		}
 
+		record, err := loadMFA(d, user.ID)
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+		if record.TOTPSecret != "" || len(record.Credentials) > 0 {
+			transaction, err := issueTransaction(d, mfaTransaction{Purpose: "login", UserID: user.ID})
+			if err != nil {
+				return http.StatusInternalServerError, err
+			}
+			methods := make([]string, 0, 2)
+			if record.TOTPSecret != "" {
+				methods = append(methods, "totp")
+			}
+			if len(record.Credentials) > 0 {
+				methods = append(methods, "passkey")
+			}
+			payload, err := json.Marshal(map[string]any{"transaction": transaction, "methods": methods})
+			if err != nil {
+				return http.StatusInternalServerError, err
+			}
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusAccepted)
+			if _, err := w.Write(payload); err != nil {
+				return 0, err
+			}
+			return 0, nil
+		}
+
 		return printToken(w, r, d, user, tokenExpireTime)
 	}
 }
-
 
 type signupBody struct {
 	Username string `json:"username"`

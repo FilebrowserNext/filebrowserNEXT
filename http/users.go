@@ -128,6 +128,11 @@ var userDeleteHandler = withSelfOrAdmin(func(_ http.ResponseWriter, r *http.Requ
 	if err != nil {
 		return errToStatus(err), err
 	}
+	if d.store.MFA != nil {
+		if err := d.store.MFA.Delete(d.raw.(uint)); err != nil && !errors.Is(err, fberrors.ErrNotExist) {
+			return http.StatusInternalServerError, err
+		}
+	}
 
 	return http.StatusOK, nil
 })

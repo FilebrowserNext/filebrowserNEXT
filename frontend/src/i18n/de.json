@@ -68,7 +68,8 @@
     "forbidden": "Du hast keine Berechtigung für diesen Zugriff.",
     "internal": "Da ist etwas schiefgelaufen.",
     "notFound": "Dieser Ort ist nicht erreichbar.",
-    "connection": "Der Server ist nicht erreichbar."
+    "connection": "Der Server ist nicht erreichbar.",
+    "passkeyFailed": "Die Passkey-Authentifizierung konnte nicht abgeschlossen werden."
   },
   "files": {
     "body": "Inhalt",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Passwort muss mindestens {min} Zeichen lang sein",
     "logout_reasons": {
       "inactivity": "Du wurdest wegen Inaktivität abgemeldet."
-    }
+    },
+    "totpCode": "Authentifizierungscode",
+    "verifyTotp": "Code prüfen",
+    "usePasskey": "Passkey verwenden"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "Benutzer aktualisiert!",
     "username": "Benutzername",
     "users": "Benutzer",
-    "currentPassword": "Dein aktuelles Passwort"
+    "currentPassword": "Dein aktuelles Passwort",
+    "multiFactorAuthentication": "Mehrstufige Authentifizierung",
+    "mfaDescription": "Schützen Sie dieses Konto mit einer Authenticator-App oder einem Passkey. Bestätigen Sie Ihr aktuelles Passwort, bevor Sie Änderungen vornehmen.",
+    "enableTotp": "Authenticator-App einrichten",
+    "totpEnabled": "Authenticator-App aktiviert",
+    "addPasskey": "Passkey hinzufügen",
+    "passkeyAdded": "Passkey hinzugefügt",
+    "passkeysRegistered": "{count} Passkey(s) registriert"
   },
   "sidebar": {
     "diskUsed": "{used} von {total} belegt",

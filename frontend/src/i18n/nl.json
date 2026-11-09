@@ -68,7 +68,8 @@
     "forbidden": "U hebt hier geen toegangsrechten.",
     "internal": "Er ging iets mis.",
     "notFound": "Deze locatie kan niet worden bereikt.",
-    "connection": "De server kan niet worden bereikt."
+    "connection": "De server kan niet worden bereikt.",
+    "passkeyFailed": "De authenticatie met passkey kon niet worden voltooid."
   },
   "files": {
     "body": "Inoud",
@@ -126,7 +127,10 @@
     "passwordTooShort": "Wachtwoord moet minstens {min} tekens bevatten",
     "logout_reasons": {
       "inactivity": "U bent uitgelogd vanwege inactiviteit."
-    }
+    },
+    "totpCode": "Authenticatiecode",
+    "verifyTotp": "Code verifiëren",
+    "usePasskey": "Een passkey gebruiken"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -283,7 +287,14 @@
     "userUpdated": "Gebruiker bijgewerkt!",
     "username": "Gebruikersnaam",
     "users": "Gebruikers",
-    "currentPassword": "Uw huidige wachtwoord"
+    "currentPassword": "Uw huidige wachtwoord",
+    "multiFactorAuthentication": "Meervoudige authenticatie",
+    "mfaDescription": "Bescherm dit account met een authenticatie-app of passkey. Bevestig uw huidige wachtwoord voordat u wijzigingen aanbrengt.",
+    "enableTotp": "Authenticatie-app instellen",
+    "totpEnabled": "Authenticatie-app ingeschakeld",
+    "addPasskey": "Passkey toevoegen",
+    "passkeyAdded": "Passkey toegevoegd",
+    "passkeysRegistered": "{count} passkey(s) geregistreerd"
   },
   "sidebar": {
     "diskUsed": "{used} van {total} gebruikt",

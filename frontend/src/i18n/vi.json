@@ -66,7 +66,8 @@
     "forbidden": "Bạn không có quyền truy cập vào nội dung này.",
     "internal": "Đã xảy ra lỗi nghiêm trọng.",
     "notFound": "Không thể truy cập vị trí này.",
-    "connection": "Không thể kết nối đến máy chủ."
+    "connection": "Không thể kết nối đến máy chủ.",
+    "passkeyFailed": "Không thể hoàn tất xác thực bằng khóa truy cập."
   },
   "files": {
     "body": "Nội dung",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Mã xác thực",
+    "verifyTotp": "Xác minh mã",
+    "usePasskey": "Dùng khóa truy cập"
   },
   "permanent": "Vĩnh viễn",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Người dùng đã được cập nhật!",
     "username": "Tên người dùng",
     "users": "Người dùng",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Xác thực đa yếu tố",
+    "mfaDescription": "Bảo vệ tài khoản này bằng ứng dụng xác thực hoặc khóa truy cập. Xác nhận mật khẩu hiện tại trước khi thay đổi.",
+    "enableTotp": "Thiết lập ứng dụng xác thực",
+    "totpEnabled": "Đã bật ứng dụng xác thực",
+    "addPasskey": "Thêm khóa truy cập",
+    "passkeyAdded": "Đã thêm khóa truy cập",
+    "passkeysRegistered": "Số khóa truy cập đã đăng ký: {count}"
   },
   "sidebar": {
     "help": "Trợ giúp",

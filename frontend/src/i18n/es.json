@@ -66,7 +66,8 @@
     "forbidden": "No tienes los permisos necesarios para acceder.",
     "internal": "La verdad es que algo ha ido mal.",
     "notFound": "No se puede acceder a este lugar.",
-    "connection": "No se puede acceder al servidor."
+    "connection": "No se puede acceder al servidor.",
+    "passkeyFailed": "No se pudo completar la autenticación con clave de acceso."
   },
   "files": {
     "body": "Cuerpo",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Código de autenticación",
+    "verifyTotp": "Verificar código",
+    "usePasskey": "Usar una clave de acceso"
   },
   "permanent": "Permanente",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "¡Usuario actualizado!",
     "username": "Usuario",
     "users": "Usuarios",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Autenticación multifactor",
+    "mfaDescription": "Protege esta cuenta con una aplicación de autenticación o una clave de acceso. Confirma tu contraseña actual antes de realizar cambios.",
+    "enableTotp": "Configurar aplicación de autenticación",
+    "totpEnabled": "Aplicación de autenticación activada",
+    "addPasskey": "Añadir una clave de acceso",
+    "passkeyAdded": "Clave de acceso añadida",
+    "passkeysRegistered": "{count} claves de acceso registradas"
   },
   "sidebar": {
     "help": "Ayuda",

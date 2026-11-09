@@ -69,6 +69,8 @@ filebrowser config set [flags]
       --sorting.asc                      sorting by ascending order
       --sorting.by string                sorting mode (name, size or modified) (default "name")
       --tokenExpirationTime string       user session timeout (default "2h")
+      --webAuthnOrigins strings           allowed passkey origins, for example https://files.example.org
+      --webAuthnRPID string               passkey relying party ID, for example files.example.org
       --tus.chunkSize uint               the tus chunk size (default 10485760)
       --tus.retryCount uint16            the tus retry count (default 5)
       --viewMode string                  view mode for users (default "list")

@@ -66,7 +66,8 @@
     "forbidden": "Þú hefur ekki aðgang að þessari síðu.",
     "internal": "Eitthvað fór úrskeiðis.",
     "notFound": "Ekki er hægt að opna þessa síðu.",
-    "connection": "The server can't be reached."
+    "connection": "The server can't be reached.",
+    "passkeyFailed": "Ekki tókst að ljúka auðkenningu með aðgangslykli."
   },
   "files": {
     "body": "Meginmál",
@@ -124,7 +125,10 @@
     "passwordTooShort": "Password must be at least {min} characters",
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
-    }
+    },
+    "totpCode": "Auðkenningarkóði",
+    "verifyTotp": "Staðfesta kóða",
+    "usePasskey": "Nota aðgangslykil"
   },
   "permanent": "Varanlegt",
   "prompts": {
@@ -278,7 +282,14 @@
     "userUpdated": "Notandastillingar vistaðar!",
     "username": "Notendanafn",
     "users": "Notendur",
-    "currentPassword": "Your Current Password"
+    "currentPassword": "Your Current Password",
+    "multiFactorAuthentication": "Fjölþáttaauðkenning",
+    "mfaDescription": "Verndaðu þennan reikning með auðkenningarforriti eða aðgangslykli. Staðfestu núverandi lykilorð áður en þú gerir breytingar.",
+    "enableTotp": "Setja upp auðkenningarforrit",
+    "totpEnabled": "Auðkenningarforrit virkt",
+    "addPasskey": "Bæta við aðgangslykli",
+    "passkeyAdded": "Aðgangslykli bætt við",
+    "passkeysRegistered": "Skráðir aðgangslyklar: {count}"
   },
   "sidebar": {
     "help": "Hjálp",

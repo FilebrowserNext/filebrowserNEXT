@@ -72,7 +72,8 @@
     "tooManyRequests": "Trop de requêtes. Veuillez réessayer plus tard.",
     "emptyPassword": "Le mot de passe ne peut pas être vide.",
     "enterCurrentPassword": "Veuillez entrer votre mot de passe actuel.",
-    "currentPasswordIncorrect": "Le mot de passe actuel est incorrect."
+    "currentPasswordIncorrect": "Le mot de passe actuel est incorrect.",
+    "passkeyFailed": "L’authentification par clé d’accès n’a pas pu être terminée."
   },
   "files": {
     "body": "Corps",
@@ -130,7 +131,10 @@
     "passwordTooShort": "Le mot de passe doit contenir au moins {min} caractères",
     "logout_reasons": {
       "inactivity": "Vous avez été déconnecté'e en raison d'une inactivité prolongée."
-    }
+    },
+    "totpCode": "Code d’authentification",
+    "verifyTotp": "Vérifier le code",
+    "usePasskey": "Utiliser une clé d’accès"
   },
   "permanent": "Permanent",
   "prompts": {
@@ -287,7 +291,14 @@
     "userUpdated": "Utilisateur'ice mis à jour !",
     "username": "Nom d'utilisateur'ice",
     "users": "Utilisateur'ices",
-    "currentPassword": "Mot de Passe Actuel"
+    "currentPassword": "Mot de Passe Actuel",
+    "multiFactorAuthentication": "Authentification multifacteur",
+    "mfaDescription": "Protégez ce compte avec une application d’authentification ou une clé d’accès. Confirmez votre mot de passe actuel avant toute modification.",
+    "enableTotp": "Configurer une application d’authentification",
+    "totpEnabled": "Application d’authentification activée",
+    "addPasskey": "Ajouter une clé d’accès",
+    "passkeyAdded": "Clé d’accès ajoutée",
+    "passkeysRegistered": "{count} clés d’accès enregistrées"
   },
   "sidebar": {
     "diskUsed": "{used} sur {total} utilisés",
