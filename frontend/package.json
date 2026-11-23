@@ -1,6 +1,6 @@
 {
   "name": "filebrowser-frontend",
-  "version": "3.1.0-next",
+  "version": "3.0.2-next",
   "private": true,
   "type": "module",
   "engines": {

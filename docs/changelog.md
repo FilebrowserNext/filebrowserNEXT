@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## File Browser Next 3.1.0-next (2026-11-23)
+## File Browser Next 3.0.2-next (2026-11-23)
 
 ### Features
 
