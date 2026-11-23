@@ -16,6 +16,8 @@ filebrowser config set [flags]
 ```
       --aceEditorTheme string            ace editor's syntax highlighting theme for users
   -a, --address string                   address to listen on (default "127.0.0.1")
+      --altcha                           enable the self-hosted ALTCHA proof-of-work captcha on login and signup (auth.method=json)
+      --altcha.complexity int            upper bound of the ALTCHA proof-of-work counter (higher is slower to solve) (default 100000)
       --auth.command string              command for auth.method=hook
       --auth.header string               HTTP header for auth.method=proxy
       --auth.logoutPage string           url of custom logout page
@@ -25,7 +27,7 @@ filebrowser config set [flags]
       --branding.disableExternal         disable external links such as GitHub links
       --branding.disableUsedPercentage   disable used disk percentage graph
       --branding.files string            path to directory with images and custom styles
-      --branding.name string             replace 'File Browser' by this name
+      --branding.name string             replace 'File Browser Next' by this name
       --branding.theme string            set the theme
   -t, --cert string                      tls certificate
       --commands strings                 a list of the commands a user can execute
@@ -56,9 +58,6 @@ filebrowser config set [flags]
       --perm.rename                      rename perm for users (default true)
       --perm.share                       share perm for users (default true)
   -p, --port string                      port to listen on (default "8080")
-      --recaptcha.host string            use another host for ReCAPTCHA. recaptcha.net might be useful in China (default "https://www.google.com")
-      --recaptcha.key string             ReCaptcha site key
-      --recaptcha.secret string          ReCaptcha secret
       --redirectAfterCopyMove            redirect to destination after copy/move
   -r, --root string                      root to prepend to relative paths (default ".")
       --scope string                     scope for users (default ".")
@@ -69,11 +68,11 @@ filebrowser config set [flags]
       --sorting.asc                      sorting by ascending order
       --sorting.by string                sorting mode (name, size or modified) (default "name")
       --tokenExpirationTime string       user session timeout (default "2h")
-      --webAuthnOrigins strings           allowed passkey origins, for example https://files.example.org
-      --webAuthnRPID string               passkey relying party ID, for example files.example.org
       --tus.chunkSize uint               the tus chunk size (default 10485760)
       --tus.retryCount uint16            the tus retry count (default 5)
       --viewMode string                  view mode for users (default "list")
+      --webAuthnOrigins strings          allowed passkey origins, for example https://files.example.org
+      --webAuthnRPID string              passkey relying party ID, for example files.example.org
 ```
 
 ## Options inherited from parent commands

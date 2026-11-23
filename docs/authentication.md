@@ -10,21 +10,31 @@ We call it JSON Authentication but it is just the default authentication method 
 filebrowser config set --auth.method=json
 ```
 
-This method can also be extended with **reCAPTCHA** verification during login:
+This method can also be protected by a **self-hosted captcha** during login and signup, based on [ALTCHA](https://altcha.org/) (MIT license):
 
 ```sh
-filebrowser config set --auth.method=json \
-  --recaptcha.key site-key \
-  --recaptcha.secret private-key
+filebrowser config set --auth.method=json --altcha
 ```
 
-By default, we use [Google's reCAPTCHA](https://developers.google.com/recaptcha/docs/display) service. If you live in China, or want to use other provider, you can change the host with the following command:
+- The browser solves a small SHA-256 proof of work in a background worker. There is no image puzzle to read and nothing to transcribe, which keeps the form accessible.
+- Challenges are created and verified by File Browser Next itself. The widget and its worker are served from your instance, so no third-party service is contacted and no cookie is set.
+- Each solution is valid once and only until the challenge expires (10 minutes). A signing secret is generated automatically when the captcha is enabled; `config cat` hides it.
+
+The difficulty can be tuned with `--altcha.complexity` (default `100000`, minimum `1000`). Higher values take longer to solve: the default takes well under a second on a current device.
 
 ```sh
-filebrowser config set --recaptcha.host https://recaptcha.net
+filebrowser config set --altcha.complexity 200000
 ```
 
-Where `https://recaptcha.net` is any provider you want.
+To disable the captcha again:
+
+```sh
+filebrowser config set --altcha=false
+```
+
+### Migrating from Google reCAPTCHA
+
+Google reCAPTCHA support has been removed. It loaded a Google script on every login page, which the Content-Security-Policy of File Browser Next blocks. The `--recaptcha.*` flags are still accepted for compatibility, but they print a deprecation notice and have no effect. If your database still holds reCAPTCHA settings, the server logs a warning at startup. Run `filebrowser config set --altcha` to switch to the self-hosted captcha; this also removes the old settings.
 
 ## Multi-factor authentication
 
