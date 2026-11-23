@@ -6,7 +6,14 @@ import legacy from "@vitejs/plugin-legacy";
 import { compression } from "vite-plugin-compression2";
 
 const plugins = [
-  vue(),
+  vue({
+    template: {
+      compilerOptions: {
+        // Self-hosted ALTCHA captcha web component.
+        isCustomElement: (tag) => tag === "altcha-widget",
+      },
+    },
+  }),
   VueI18nPlugin({
     include: [path.resolve(__dirname, "./src/i18n/**/*.json")],
   }),

@@ -61,9 +61,9 @@ type PublicKeyEnvelope = {
 export async function login(
   username: string,
   password: string,
-  recaptcha: string
+  captcha: string
 ): Promise<MFAChallenge | null> {
-  const data = { username, password, recaptcha };
+  const data = { username, password, captcha };
 
   const res = await fetch(`${baseURL}/api/login`, {
     method: "POST",
@@ -195,8 +195,12 @@ export async function renew(jwt: string) {
   }
 }
 
-export async function signup(username: string, password: string) {
-  const data = { username, password };
+export async function signup(
+  username: string,
+  password: string,
+  captcha: string
+) {
+  const data = { username, password, captcha };
 
   const res = await fetch(`${baseURL}/api/signup`, {
     method: "POST",

@@ -128,7 +128,19 @@
     },
     "totpCode": "Código de autenticación",
     "verifyTotp": "Verificar código",
-    "usePasskey": "Usar una clave de acceso"
+    "usePasskey": "Usar una clave de acceso",
+    "captcha": {
+      "label": "Soy una persona humana",
+      "loading": "Cargando…",
+      "verify": "Verificar",
+      "verifying": "Verificando…",
+      "verified": "Verificado",
+      "verificationRequired": "Completa la verificación, por favor.",
+      "waitAlert": "Verificación en curso, espera por favor.",
+      "error": "La verificación ha fallado. Inténtalo de nuevo.",
+      "expired": "La verificación ha caducado. Inténtalo de nuevo.",
+      "reload": "Reintentar"
+    }
   },
   "permanent": "Permanente",
   "prompts": {

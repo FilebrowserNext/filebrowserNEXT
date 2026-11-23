@@ -1,6 +1,6 @@
 <template>
-  <div id="login" :class="{ recaptcha: recaptcha }">
-    <form @submit="submit">
+  <div id="login">
+    <form novalidate @submit="submit">
       <img :src="logoURL" alt="File Browser Next" />
       <h1>{{ name }}</h1>
       <p v-if="reason != null" class="logout-message">
@@ -31,7 +31,15 @@
           :placeholder="t('login.passwordConfirm')"
         />
 
-        <div v-if="recaptcha" id="recaptcha"></div>
+        <altcha-widget
+          v-if="altcha"
+          ref="captchaWidget"
+          class="captcha"
+          auto="onfocus"
+          type="checkbox"
+          @verified="onCaptchaVerified"
+          @expired="onCaptchaExpired"
+        ></altcha-widget>
         <input
           class="button button--block"
           type="submit"
@@ -75,13 +83,8 @@
 <script setup lang="ts">
 import { StatusError } from "@/api/utils";
 import * as auth from "@/utils/auth";
-import {
-  name,
-  logoURL,
-  recaptcha,
-  recaptchaKey,
-  signup,
-} from "@/utils/constants";
+import { altcha, name, logoURL, signup } from "@/utils/constants";
+import type { AltchaWidgetElement } from "altcha";
 import { inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -95,10 +98,12 @@ const passwordConfirm = ref<string>("");
 const totpCode = ref<string>("");
 const mfaTransaction = ref<string>("");
 const mfaMethods = ref<string[]>([]);
+const captchaWidget = ref<AltchaWidgetElement | null>(null);
+const captchaPayload = ref<string>("");
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n({});
+const { t, locale } = useI18n({});
 // Define functions
 const toggleMode = () => (createMode.value = !createMode.value);
 
@@ -112,16 +117,6 @@ const submit = async (event: Event) => {
 
   const redirect = (route.query.redirect || "/files/") as string;
 
-  let captcha = "";
-  if (recaptcha) {
-    captcha = window.grecaptcha.getResponse();
-
-    if (captcha === "") {
-      error.value = t("login.wrongCredentials");
-      return;
-    }
-  }
-
   if (createMode.value) {
     if (password.value !== passwordConfirm.value) {
       error.value = t("login.passwordsDontMatch");
@@ -131,13 +126,18 @@ const submit = async (event: Event) => {
 
   try {
     if (createMode.value) {
-      await auth.signup(username.value.trim(), password.value);
+      const signupCaptcha = await nextCaptcha();
+      if (signupCaptcha === null) return;
+      await auth.signup(username.value.trim(), password.value, signupCaptcha);
     }
+
+    const loginCaptcha = await nextCaptcha();
+    if (loginCaptcha === null) return;
 
     const challenge = await auth.login(
       username.value.trim(),
       password.value,
-      captcha
+      loginCaptcha
     );
     if (challenge === null) {
       router.push({ path: redirect });
@@ -192,14 +192,78 @@ const submitPasskey = async () => {
   }
 };
 
+const onCaptchaVerified = (event: Event) => {
+  captchaPayload.value =
+    (event as CustomEvent<{ payload: string }>).detail?.payload ?? "";
+};
+
+const onCaptchaExpired = () => {
+  captchaPayload.value = "";
+};
+
+/**
+ * Returns a fresh captcha solution, solving one on demand when the widget has
+ * not been verified yet. Solutions are single-use, so the widget is reset for
+ * the next request. Returns "" when no captcha is configured and null (with an
+ * error displayed) when verification could not be completed.
+ */
+const nextCaptcha = async (): Promise<string | null> => {
+  if (!altcha) return "";
+  const widget = captchaWidget.value;
+  if (widget === null) return null;
+
+  if (captchaPayload.value === "") {
+    const result = await widget.verify().catch((e: unknown) => {
+      console.error("captcha verification failed", e);
+      return null;
+    });
+    captchaPayload.value = result?.payload ?? "";
+  }
+
+  const payload = captchaPayload.value;
+  captchaPayload.value = "";
+  widget.reset();
+
+  if (payload === "") {
+    error.value = t("login.captcha.verificationRequired");
+    return null;
+  }
+  return payload;
+};
+
+const setupCaptcha = async () => {
+  const captcha = await import("@/utils/captcha");
+  captcha.registerCaptcha();
+
+  const language = `fb-${locale.value}`;
+  captcha.setCaptchaStrings(language, {
+    error: t("login.captcha.error"),
+    expired: t("login.captcha.expired"),
+    label: t("login.captcha.label"),
+    loading: t("login.captcha.loading"),
+    reload: t("login.captcha.reload"),
+    verify: t("login.captcha.verify"),
+    verificationRequired: t("login.captcha.verificationRequired"),
+    verified: t("login.captcha.verified"),
+    verifying: t("login.captcha.verifying"),
+    waitAlert: t("login.captcha.waitAlert"),
+  });
+
+  await customElements.whenDefined("altcha-widget");
+  await captchaWidget.value?.configure({
+    challenge: captcha.challengeURL,
+    hideFooter: true,
+    hideLogo: true,
+    language,
+  });
+};
+
 // Run hooks
 onMounted(() => {
-  if (!recaptcha) return;
-
-  window.grecaptcha.ready(function () {
-    window.grecaptcha.render("recaptcha", {
-      sitekey: recaptchaKey,
-    });
+  if (!altcha) return;
+  setupCaptcha().catch((e: unknown) => {
+    console.error("captcha setup failed", e);
+    error.value = t("login.captcha.error");
   });
 });
 </script>

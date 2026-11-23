@@ -14,7 +14,7 @@ import Errors from "@/views/Errors.vue";
 import { useAuthStore } from "@/stores/auth";
 import { baseURL, name } from "@/utils/constants";
 import i18n from "@/i18n";
-import { recaptcha, loginPage } from "@/utils/constants";
+import { loginPage } from "@/utils/constants";
 import { login, validateLogin } from "@/utils/auth";
 
 const titles = {
@@ -158,20 +158,6 @@ async function initAuth() {
     await validateLogin();
   } else {
     await login("", "", "");
-  }
-
-  if (recaptcha) {
-    await new Promise<void>((resolve) => {
-      const check = () => {
-        if (typeof window.grecaptcha === "undefined") {
-          setTimeout(check, 100);
-        } else {
-          resolve();
-        }
-      };
-
-      check();
-    });
   }
 }
 

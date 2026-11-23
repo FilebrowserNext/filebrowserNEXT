@@ -1,6 +1,6 @@
 #login {
   background: var(--background);
-  background-image: 
+  background-image:
     radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
     radial-gradient(at 90% 80%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
   position: fixed;
@@ -51,14 +51,24 @@
   letter-spacing: -0.02em;
 }
 
-#login.recaptcha form {
-  min-width: 320px;
-}
-
-#login #recaptcha {
-  margin: 1em 0;
-  display: flex;
-  justify-content: center;
+#login .captcha {
+  display: block;
+  margin: 0.5em 0 1em;
+  --altcha-max-width: 100%;
+  --altcha-color-base: var(--surfaceSecondary);
+  --altcha-color-base-content: var(--textSecondary);
+  --altcha-color-primary: var(--blue);
+  --altcha-color-success: var(--green, #10b981);
+  --altcha-color-error: var(--red);
+  --altcha-border-color: var(--borderPrimary);
+  --altcha-border-radius: var(--radius-sm, 8px);
+  /* The widget defaults rely on light-dark(), which the legacy build lowers
+     into invalid values; the theme colours are set explicitly instead. */
+  --altcha-color-neutral: var(--borderSecondary);
+  --altcha-color-neutral-content: var(--textSecondary);
+  --altcha-checkbox-border-color: var(--borderSecondary);
+  --altcha-input-background-color: var(--surfacePrimary);
+  --altcha-input-color: var(--textSecondary);
 }
 
 #login .wrong {

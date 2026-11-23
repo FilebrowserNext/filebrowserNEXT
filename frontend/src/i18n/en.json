@@ -132,6 +132,18 @@
     "totpCode": "Authentication code",
     "verifyTotp": "Verify code",
     "usePasskey": "Use a passkey",
+    "captcha": {
+      "label": "I am human",
+      "loading": "Loading...",
+      "verify": "Verify",
+      "verifying": "Verifying...",
+      "verified": "Verified",
+      "verificationRequired": "Please complete the verification.",
+      "waitAlert": "Verification in progress, please wait.",
+      "error": "Verification failed. Please try again.",
+      "expired": "Verification expired. Please try again.",
+      "reload": "Retry"
+    },
     "logout_reasons": {
       "inactivity": "You have been logged out due to inactivity."
     }

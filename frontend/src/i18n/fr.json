@@ -134,7 +134,19 @@
     },
     "totpCode": "Code d’authentification",
     "verifyTotp": "Vérifier le code",
-    "usePasskey": "Utiliser une clé d’accès"
+    "usePasskey": "Utiliser une clé d’accès",
+    "captcha": {
+      "label": "Je suis une personne humaine",
+      "loading": "Chargement…",
+      "verify": "Vérifier",
+      "verifying": "Vérification…",
+      "verified": "Vérifié",
+      "verificationRequired": "Merci de terminer la vérification.",
+      "waitAlert": "Vérification en cours, merci de patienter.",
+      "error": "La vérification a échoué. Merci de réessayer.",
+      "expired": "La vérification a expiré. Merci de réessayer.",
+      "reload": "Réessayer"
+    }
   },
   "permanent": "Permanent",
   "prompts": {

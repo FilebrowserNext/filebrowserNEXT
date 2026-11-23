@@ -3,8 +3,7 @@ const disableExternal: boolean = window.FileBrowser.DisableExternal;
 const disableUsedPercentage: boolean = window.FileBrowser.DisableUsedPercentage;
 const baseURL: string = window.FileBrowser.BaseURL;
 const staticURL: string = window.FileBrowser.StaticURL;
-const recaptcha: string = window.FileBrowser.ReCaptcha;
-const recaptchaKey: string = window.FileBrowser.ReCaptchaKey;
+const altcha: boolean = window.FileBrowser.Altcha === true;
 const signup: boolean = window.FileBrowser.Signup;
 const version: string = window.FileBrowser.Version;
 const logoURL = `${staticURL}/img/logo.svg`;
@@ -27,8 +26,7 @@ export {
   disableUsedPercentage,
   baseURL,
   logoURL,
-  recaptcha,
-  recaptchaKey,
+  altcha,
   signup,
   version,
   noAuth,
