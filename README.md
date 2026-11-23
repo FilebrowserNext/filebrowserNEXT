@@ -73,6 +73,8 @@ All API and page responses now include the following headers in addition to `Con
 - **Replay-Proof**: Each solution is HMAC-signed, valid only once and expires after 10 minutes.
 - **Replaces Google reCAPTCHA**: Enable it with `filebrowser config set --altcha` (difficulty via `--altcha.complexity`). See the [authentication guide](docs/authentication.md) for details and migration.
 
+> **Disabled by default, HTTPS only.** The captcha is off until you enable it. It needs a secure context: the instance must be served over **HTTPS** (or opened on `localhost`). Over plain HTTP, for example `http://192.168.x.x:8080` on a local network, browsers block the cryptography the widget relies on, it shows *"Secure context (HTTPS) required"* and **nobody can log in**. Enable it only on instances exposed to the internet behind HTTPS; on a private instance reached over HTTP it brings nothing, so leave it disabled.
+
 ---
 
 

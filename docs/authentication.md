@@ -10,7 +10,7 @@ We call it JSON Authentication but it is just the default authentication method 
 filebrowser config set --auth.method=json
 ```
 
-This method can also be protected by a **self-hosted captcha** during login and signup, based on [ALTCHA](https://altcha.org/) (MIT license):
+This method can also be protected by a **self-hosted captcha** during login and signup, based on [ALTCHA](https://altcha.org/) (MIT license). It is **disabled by default**.
 
 ```sh
 filebrowser config set --auth.method=json --altcha
@@ -19,6 +19,28 @@ filebrowser config set --auth.method=json --altcha
 - The browser solves a small SHA-256 proof of work in a background worker. There is no image puzzle to read and nothing to transcribe, which keeps the form accessible.
 - Challenges are created and verified by File Browser Next itself. The widget and its worker are served from your instance, so no third-party service is contacted and no cookie is set.
 - Each solution is valid once and only until the challenge expires (10 minutes). A signing secret is generated automatically when the captcha is enabled; `config cat` hides it.
+
+!!! warning "HTTPS required"
+    The widget relies on the browser cryptography API (`crypto.subtle`), which browsers only provide in a **secure context**: a page served over HTTPS, or opened on `localhost` / `127.0.0.1`. On plain HTTP, for example `http://192.168.1.10:8080` on a local network, the widget shows *"Secure context (HTTPS) required"*, no challenge can be solved and **every login is refused**.
+
+    Enable the captcha only on instances exposed to the internet behind HTTPS (directly or through a reverse proxy). On a private instance reached over HTTP it brings nothing, since bots cannot reach it: leave it disabled. If you enabled it by mistake, run `filebrowser config set --altcha=false` while the server is stopped.
+
+**When to enable it**
+
+| Instance | Access | Captcha |
+|---|---|---|
+| Public, exposed to the internet | HTTPS (domain, reverse proxy) | Recommended |
+| Private, local network only | HTTP by IP address | Leave disabled (it would block logins) |
+| Local test | `http://localhost` | Works, useful to try it out |
+
+The setting is stored in the database, so `filebrowser config set` must run while the server is stopped. With Docker, stop the container and run the command in a temporary container that reuses its volumes:
+
+```sh
+docker stop filebrowser
+docker run --rm --volumes-from filebrowser --entrypoint filebrowser \
+  ghcr.io/filebrowsernext/filebrowsernext:latest config set --altcha --config /config/settings.json
+docker start filebrowser
+```
 
 The difficulty can be tuned with `--altcha.complexity` (default `100000`, minimum `1000`). Higher values take longer to solve: the default takes well under a second on a current device.
 
