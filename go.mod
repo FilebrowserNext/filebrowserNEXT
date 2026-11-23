@@ -3,6 +3,7 @@ module github.com/filebrowser/filebrowser/v2
 go 1.26.0
 
 require (
+	github.com/altcha-org/altcha-lib-go/v2 v2.5.0
 	github.com/asdine/storm/v3 v3.2.1
 	github.com/asticode/go-astisub v0.42.0
 	github.com/disintegration/imaging v1.6.2

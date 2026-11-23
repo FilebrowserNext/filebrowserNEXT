@@ -225,6 +225,7 @@ func loginHandler(tokenExpireTime time.Duration) handleFunc {
 type signupBody struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Captcha  string `json:"captcha"`
 }
 
 var signupHandler = func(w http.ResponseWriter, r *http.Request, d *data) (int, error) {
@@ -246,6 +247,10 @@ var signupHandler = func(w http.ResponseWriter, r *http.Request, d *data) (int, 
 
 	if info.Password == "" || info.Username == "" {
 		return http.StatusBadRequest, nil
+	}
+
+	if status, err := verifySignupCaptcha(d, info.Captcha); status != 0 {
+		return status, err
 	}
 
 	user := &users.User{

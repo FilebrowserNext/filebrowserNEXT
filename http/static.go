@@ -43,7 +43,7 @@ func handleWithStaticData(w http.ResponseWriter, _ *http.Request, d *data, fSys 
 		"LogoutPage":            d.settings.LogoutPage,
 		"LoginPage":             auther.LoginPage(),
 		"CSS":                   false,
-		"ReCaptcha":             false,
+		"Altcha":                false,
 		"Theme":                 d.settings.Branding.Theme,
 		"EnableThumbs":          d.server.EnableThumbnails,
 		"ResizePreview":         d.server.ResizePreview,
@@ -65,19 +65,12 @@ func handleWithStaticData(w http.ResponseWriter, _ *http.Request, d *data, fSys 
 		}
 	}
 
-	if d.settings.AuthMethod == auth.MethodJSONAuth {
-		raw, err := d.store.Auth.Get(d.settings.AuthMethod)
-		if err != nil {
-			return http.StatusInternalServerError, err
-		}
-
-		auther := raw.(*auth.JSONAuth)
-
-		if auther.ReCaptcha != nil {
-			data["ReCaptcha"] = auther.ReCaptcha.Key != "" && auther.ReCaptcha.Secret != ""
-			data["ReCaptchaHost"] = auther.ReCaptcha.Host
-			data["ReCaptchaKey"] = auther.ReCaptcha.Key
-		}
+	jsonAuth, err := jsonAuther(d)
+	if err != nil {
+		return http.StatusInternalServerError, err
+	}
+	if jsonAuth != nil {
+		data["Altcha"] = jsonAuth.Altcha.Enabled()
 	}
 
 	b, err := json.Marshal(data)

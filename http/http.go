@@ -27,6 +27,7 @@ func NewHandler(
 	assetsFs fs.FS,
 ) (http.Handler, error) {
 	server.Clean()
+	warnLegacyCaptcha(store)
 	server.CaseInsensitiveFs = files.CaseInsensitive(afero.NewOsFs(), server.Root)
 
 	r := mux.NewRouter()
@@ -63,6 +64,7 @@ func NewHandler(
 		return completePasskeyLogin(w, r, d, tokenExpirationTime)
 	}, "")).Methods("POST")
 	api.Handle("/signup", monkey(signupHandler, ""))
+	api.Handle("/captcha/challenge", monkey(captchaChallengeHandler, "")).Methods("GET")
 	api.Handle("/renew", monkey(renewHandler(tokenExpirationTime), ""))
 	api.Handle("/logout", monkey(logoutHandler, "")).Methods("POST")
 	api.Handle("/mfa", monkey(withUser(mfaStatusHandler), "")).Methods("GET")

@@ -47,9 +47,20 @@ func addConfigFlags(flags *pflag.FlagSet) {
 	flags.String("auth.command", "", "command for auth.method=hook")
 	flags.String("auth.logoutPage", "", "url of custom logout page")
 
-	flags.String("recaptcha.host", "https://www.google.com", "use another host for ReCAPTCHA. recaptcha.net might be useful in China")
-	flags.String("recaptcha.key", "", "ReCaptcha site key")
-	flags.String("recaptcha.secret", "", "ReCaptcha secret")
+	flags.Bool("altcha", false, "enable the self-hosted ALTCHA proof-of-work captcha on login and signup (auth.method=json)")
+	flags.Int("altcha.complexity", auth.DefaultAltchaComplexity, "upper bound of the ALTCHA proof-of-work counter (higher is slower to solve)")
+
+	// Google reCAPTCHA support was removed; the flags are kept so existing
+	// scripts keep running and get a clear deprecation notice.
+	const recaptchaRemoved = "Google reCAPTCHA support was removed, use --altcha instead"
+	flags.String("recaptcha.host", "", "deprecated, ignored")
+	flags.String("recaptcha.key", "", "deprecated, ignored")
+	flags.String("recaptcha.secret", "", "deprecated, ignored")
+	for _, name := range []string{"recaptcha.host", "recaptcha.key", "recaptcha.secret"} {
+		if err := flags.MarkDeprecated(name, recaptchaRemoved); err != nil {
+			panic(err)
+		}
+	}
 
 	flags.String("branding.name", "", "replace 'File Browser Next' by this name")
 	flags.String("branding.theme", "", "set the theme")
@@ -115,42 +126,55 @@ func getNoAuth() auth.Auther {
 }
 
 func getJSONAuth(flags *pflag.FlagSet, defaultAuther map[string]interface{}) (auth.Auther, error) {
-	jsonAuth := &auth.JSONAuth{}
-	host, err := flags.GetString("recaptcha.host")
+	existing := storedAltcha(defaultAuther)
+
+	enabled, err := flags.GetBool("altcha")
 	if err != nil {
 		return nil, err
 	}
+	if !flags.Changed("altcha") {
+		enabled = existing.Enabled()
+	}
+	if !enabled {
+		return &auth.JSONAuth{}, nil
+	}
 
-	key, err := flags.GetString("recaptcha.key")
+	complexity, err := flags.GetInt("altcha.complexity")
 	if err != nil {
 		return nil, err
 	}
-
-	secret, err := flags.GetString("recaptcha.secret")
-	if err != nil {
-		return nil, err
+	if !flags.Changed("altcha.complexity") && existing.Complexity > 0 {
+		complexity = existing.Complexity
+	}
+	if complexity < auth.MinAltchaComplexity {
+		return nil, fmt.Errorf("altcha.complexity must be at least %d", auth.MinAltchaComplexity)
 	}
 
-	if key == "" {
-		if kmap, ok := defaultAuther["recaptcha"].(map[string]interface{}); ok {
-			key = kmap["key"].(string)
-		}
-	}
-
+	secret := existing.Secret
 	if secret == "" {
-		if smap, ok := defaultAuther["recaptcha"].(map[string]interface{}); ok {
-			secret = smap["secret"].(string)
+		if secret, err = auth.NewAltchaSecret(); err != nil {
+			return nil, err
 		}
 	}
 
-	if key != "" && secret != "" {
-		jsonAuth.ReCaptcha = &auth.ReCaptcha{
-			Host:   host,
-			Key:    key,
-			Secret: secret,
-		}
+	return &auth.JSONAuth{Altcha: &auth.Altcha{Secret: secret, Complexity: complexity}}, nil
+}
+
+// storedAltcha extracts the ALTCHA settings of the currently stored auther so
+// that "config set" keeps the secret and complexity unless told otherwise.
+func storedAltcha(defaultAuther map[string]interface{}) auth.Altcha {
+	var stored auth.Altcha
+	raw, ok := defaultAuther["altcha"].(map[string]interface{})
+	if !ok {
+		return stored
 	}
-	return jsonAuth, nil
+	if secret, ok := raw["secret"].(string); ok {
+		stored.Secret = secret
+	}
+	if complexity, ok := raw["complexity"].(float64); ok {
+		stored.Complexity = int(complexity)
+	}
+	return stored
 }
 
 func getHookAuth(flags *pflag.FlagSet, defaultAuther map[string]interface{}) (auth.Auther, error) {
@@ -205,6 +229,12 @@ func printSettings(ser *settings.Server, set *settings.Settings, auther auth.Aut
 	fmt.Fprintf(w, "Logout Page:\t%s\n", set.LogoutPage)
 	fmt.Fprintf(w, "Minimum Password Length:\t%d\n", set.MinimumPasswordLength)
 	fmt.Fprintf(w, "Auth Method:\t%s\n", set.AuthMethod)
+	if jsonAuth, ok := auther.(*auth.JSONAuth); ok {
+		fmt.Fprintf(w, "ALTCHA Captcha:\t%t\n", jsonAuth.Altcha.Enabled())
+		if jsonAuth.Altcha.Enabled() {
+			fmt.Fprintf(w, "ALTCHA Complexity:\t%d\n", jsonAuth.Altcha.Complexity)
+		}
+	}
 	fmt.Fprintf(w, "Shell:\t%s\t\n", strings.Join(set.Shell, " "))
 
 	fmt.Fprintln(w, "\nBranding:")
@@ -266,12 +296,25 @@ func printSettings(ser *settings.Server, set *settings.Settings, auther auth.Aut
 
 	w.Flush()
 
-	b, err := json.MarshalIndent(auther, "", "  ")
+	b, err := json.MarshalIndent(redactAuther(auther), "", "  ")
 	if err != nil {
 		return err
 	}
 	fmt.Printf("\nAuther configuration (raw):\n\n%s\n\n", string(b))
 	return nil
+}
+
+// redactAuther hides the ALTCHA signing secret from printed configurations.
+func redactAuther(auther auth.Auther) interface{} {
+	jsonAuth, ok := auther.(*auth.JSONAuth)
+	if !ok || !jsonAuth.Altcha.Enabled() {
+		return auther
+	}
+	shown := *jsonAuth
+	captcha := *jsonAuth.Altcha
+	captcha.Secret = "(hidden)"
+	shown.Altcha = &captcha
+	return shown
 }
 
 func getSettings(flags *pflag.FlagSet, set *settings.Settings, ser *settings.Server, auther auth.Auther, all bool) (auth.Auther, error) {
