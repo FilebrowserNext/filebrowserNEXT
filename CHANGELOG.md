@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## File Browser Next 3.1.0-next (2026-11-23)
+
+### Features
+
+* **auth:** add a self-hosted ALTCHA proof-of-work captcha for login and signup (`--altcha`, `--altcha.complexity`); challenges are created and verified locally, the widget and its SHA-256 worker are served by the instance, no third-party request and no cookie
+* **auth:** protect self-registration with the captcha as well, not only login
+* **i18n:** translate the captcha widget in English, French and Spanish
+
+### Security
+
+* **auth:** each captcha solution is single-use and expires after 10 minutes (replay protection)
+* **cli:** hide the captcha signing secret in `config cat`, `config set` and `config init` output
+
+### Breaking Changes
+
+* **auth:** remove Google reCAPTCHA support; it loaded a Google script that the Content-Security-Policy already blocked, which left the login page unusable. The `--recaptcha.*` flags are kept as deprecated no-ops and stored reCAPTCHA settings trigger a startup warning; run `filebrowser config set --altcha` to migrate
+
+
 ## File Browser Next 3.0.1-next (2026-11-09)
 
 ### Features
