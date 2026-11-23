@@ -1,0 +1,32 @@
+name: Refresh Release Notes
+
+# Rewrites the notes of an existing release from its CHANGELOG.md section,
+# without rebuilding or replacing the published binaries.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v3.0.2-next)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-notes:
+    name: Refresh release notes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.inputs.tag }}
+        run: |
+          scripts/release-notes.sh "${TAG}" > /tmp/release_notes.md
+          gh release edit "${TAG}" --notes-file /tmp/release_notes.md
+          echo "Release notes of ${TAG} updated."

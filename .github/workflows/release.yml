@@ -101,22 +101,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Notes come from the CHANGELOG.md section of the version, since
+          # --generate-notes only lists merged pull requests.
+          scripts/release-notes.sh "${TAG}" > /tmp/release_notes.md
+
           if ! gh release view "${TAG}" >/dev/null 2>&1; then
             echo "Release ${TAG} does not exist yet, creating release..."
-            gh release create "${TAG}" dist/* --title "File Browser Next ${TAG}" --generate-notes
+            gh release create "${TAG}" dist/* --title "File Browser Next ${TAG}" --notes-file /tmp/release_notes.md
           else
-            echo "Release ${TAG} exists, uploading assets..."
+            echo "Release ${TAG} exists, uploading assets and refreshing notes..."
             gh release upload "${TAG}" dist/* --clobber
-          fi
-
-          echo "Ensuring Downloads & Checksums table exists in release notes..."
-          BODY=$(gh release view "${TAG}" --json body -q .body 2>/dev/null || true)
-          if [[ -n "$BODY" ]] && ! echo "$BODY" | grep -q "Downloads & Checksums"; then
-            printf '\n---\n\n### Downloads & Checksums\n\n| OS / Architecture | Archive |\n|---|---|\n| Linux x86_64 | `filebrowser-linux-amd64.tar.gz` |\n| Linux ARM64 / Raspberry Pi | `filebrowser-linux-arm64.tar.gz` |\n| macOS Intel | `filebrowser-darwin-amd64.tar.gz` |\n| macOS Apple Silicon (M1/M2/M3/M4) | `filebrowser-darwin-arm64.tar.gz` |\n| Windows 64-bit | `filebrowser-windows-amd64.zip` |\n\nVerify archive integrity using `checksums.txt` (SHA256).\n\nAccess the web UI at `http://127.0.0.1:8080` (or `http://<your-server-ip>:8080`) — default credentials: `admin` / `admin`.\n' > /tmp/append_notes.md
-            NEW_BODY="${BODY}$(cat /tmp/append_notes.md)"
-            echo "$NEW_BODY" > /tmp/new_body.md
-            gh release edit "${TAG}" --notes-file /tmp/new_body.md
-            echo "Release notes updated."
+            gh release edit "${TAG}" --notes-file /tmp/release_notes.md
           fi
 
       - name: Trigger Homebrew tap update
