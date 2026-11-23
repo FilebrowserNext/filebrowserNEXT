@@ -114,20 +114,36 @@ jobs:
             gh release edit "${TAG}" --notes-file /tmp/release_notes.md
           fi
 
-      - name: Trigger Homebrew tap update
+      - name: Update Homebrew tap
         env:
-          TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          TAP_DEPLOY_KEY: ${{ secrets.HOMEBREW_TAP_DEPLOY_KEY }}
         run: |
-          # A step's own env is not available in its `if`, so the secret is
-          # checked here instead of in a condition that was always false.
-          if [[ -z "${TAP_TOKEN}" ]]; then
-            echo "::warning::HOMEBREW_TAP_TOKEN is not set, the Homebrew tap will only update on its own schedule."
+          # GITHUB_TOKEN cannot write to another repository: the tap is
+          # updated through a write deploy key scoped to homebrew-tap only.
+          if [[ -z "${TAP_DEPLOY_KEY}" ]]; then
+            echo "::warning::HOMEBREW_TAP_DEPLOY_KEY is not set, the Homebrew tap will only update on its own schedule."
             exit 0
           fi
-          echo "Triggering repository dispatch on FilebrowserNext/homebrew-tap..."
-          curl -fsS -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${TAP_TOKEN}" \
-            https://api.github.com/repos/FilebrowserNext/homebrew-tap/dispatches \
-            -d '{"event_type": "new-release"}'
-          echo "Homebrew tap update requested."
+
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "${TAP_DEPLOY_KEY}" > ~/.ssh/homebrew_tap
+          chmod 600 ~/.ssh/homebrew_tap
+          # Pinned GitHub host key (https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints).
+          echo "github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" >> ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/homebrew_tap -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+
+          git clone --depth 1 git@github.com:FilebrowserNext/homebrew-tap.git /tmp/homebrew-tap
+          cd /tmp/homebrew-tap
+          ./scripts/update-tap.sh
+
+          if git diff --quiet -- Formula; then
+            echo "Homebrew tap is already up to date."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add Formula/filebrowser.rb
+            git commit -m "bump(filebrowser): update to ${TAG}"
+            git push origin HEAD:main
+            echo "Homebrew tap updated to ${TAG}."
+          fi
+          rm -f ~/.ssh/homebrew_tap
