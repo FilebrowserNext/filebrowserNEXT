@@ -67,6 +67,12 @@ All API and page responses now include the following headers in addition to `Con
 - **Time-Based One-Time Passwords (TOTP)**: Built-in 2FA support compatible with Google Authenticator, Bitwarden, Aegis, and 1Password (RFC 6238). TOTP secrets are encrypted at rest with authenticated AES-GCM.
 - **WebAuthn / FIDO2 Passkeys**: Phishing-resistant, passwordless authentication using biometric sensors (Touch ID, Face ID, Windows Hello) and hardware security keys (YubiKey). Enforces explicit relying-party origin bindings and user verification.
 
+### 7. Self-Hosted ALTCHA Captcha (New in v3.0.2)
+- **Privacy-First Bot Protection**: Login and self-registration can be protected by [ALTCHA](https://altcha.org/), an open-source (MIT) proof-of-work captcha. The browser solves a small SHA-256 challenge in a background worker: no image puzzle, no tracking, no cookie.
+- **Fully Self-Hosted**: Challenges are created and verified by the server itself, and the widget is served from your instance. No request ever leaves for a third-party service, and the default Content-Security-Policy stays intact.
+- **Replay-Proof**: Each solution is HMAC-signed, valid only once and expires after 10 minutes.
+- **Replaces Google reCAPTCHA**: Enable it with `filebrowser config set --altcha` (difficulty via `--altcha.complexity`). See the [authentication guide](docs/authentication.md) for details and migration.
+
 ---
 
 
